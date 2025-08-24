@@ -1,0 +1,57 @@
+{
+  "name": "@nrwlz/api-fetch",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/src/schema/index.d.ts"
+    }
+  },
+  "scripts": {
+    "fetch-schema": "ts-node ./src/schema/fetch.ts && nx build api-fetch "
+  },
+  "dependencies": {
+    "nx": "21.4.0",
+    "openapi-fetch": "^0.14.0",
+    "tslib": "^2.3.0"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "executor": "@nx/js:tsc",
+        "watch": true,
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "outputPath": "lib/api-fetch/dist",
+          "tsConfig": "lib/api-fetch/tsconfig.lib.json",
+          "packageJson": "lib/api-fetch/package.json",
+          "main": "lib/api-fetch/src/index.ts",
+          "assets": [
+            "lib/api-fetch/*.md"
+          ]
+        },
+        "configurations": {
+          "development": {
+            "dependsOn": [
+              "openapi"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "ts-node": "10.9.1"
+  }
+}

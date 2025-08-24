@@ -1,0 +1,37 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/api-e2e"
+    },
+    {
+      "path": "./apps/api"
+    },
+    {
+      "path": "./lib/shared"
+    },
+    {
+      "path": "./apps/web-e2e"
+    },
+    {
+      "path": "./apps/web"
+    },
+    {
+      "path": "./lib/modules"
+    },
+    {
+      "path": "./apps/frontend-e2e"
+    },
+    {
+      "path": "./apps/frontend"
+    },
+    {
+      "path": "./lib/api-fetch"
+    },
+    {
+      "path": "./lib/auth"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "compilerOptions": {
+    "types": [
+      "node",
+      "express"
+    ]
+  },
+  "references": [
+    {
+      "path": "../../lib/shared"
+    },
+    {
+      "path": "../../lib/modules"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}
