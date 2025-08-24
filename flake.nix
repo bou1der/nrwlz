@@ -23,7 +23,7 @@
           export PATH="$PWD/node_modules/.bin:$PATH"
 
           if [ ! -d "node_modules/nx" ]; then
-            pnpm install nx
+            pnpm install
           fi
 
           alias nx="nx"
