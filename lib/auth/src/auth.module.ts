@@ -1,6 +1,6 @@
-import { APP_GUARD } from "@nestjs/core";
+import { APP_GUARD, HttpAdapterHost } from "@nestjs/core";
 import { AuthGuard } from "./auth.guard";
-// import { toNodeHandler } from "better-auth/node";
+import { toNodeHandler } from "better-auth/node";
 import { Account, Session, User, Verification } from "./entities";
 import { Global, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -23,10 +23,10 @@ import { AuthService } from "./auth.service";
   exports: [AuthService],
 })
 export class AuthModule {
-  // constructor(
-  //   // private readonly adapter: HttpAdapterHost,
-  //   private readonly auth: AuthService,
-  // ) {
-  //   this.adapter.httpAdapter.all("/auth/{*any}", toNodeHandler(this.auth.client.handler));
-  // }
+  constructor(
+    private readonly adapter: HttpAdapterHost,
+    private readonly auth: AuthService,
+  ) {
+    this.adapter.httpAdapter.all("/auth/{*any}", toNodeHandler(this.auth.client.handler));
+  }
 }

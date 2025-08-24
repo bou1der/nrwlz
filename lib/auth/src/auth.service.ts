@@ -41,7 +41,6 @@ export class AuthService {
     env: ConfigService,
     @InjectDataSource() db: DataSource,
   ) {
-    const trustedOrigins = JSON.parse(env.getOrThrow("TRUSTED_ORIGINS"))
     this.client = betterAuth({
       secret: env.getOrThrow("AUTH_SECRET"),
       basePath: "/auth",
@@ -72,7 +71,7 @@ export class AuthService {
         admin(adminPluginConfig),
         ...(env.get("NODE_ENV") === "development" ? [openAPI()] : []),
       ],
-      trustedOrigins: Array.isArray(trustedOrigins) ? trustedOrigins : undefined,
+      trustedOrigins: JSON.parse(env.get("TRUSTED_ORIGINS") || "[]"),
       ...additionalField,
     } satisfies AuthOptions);
   }
