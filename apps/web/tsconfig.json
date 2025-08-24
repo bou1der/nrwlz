@@ -3,6 +3,15 @@
   "include": [],
   "references": [
     {
+      "path": "../../lib/ui/styles"
+    },
+    {
+      "path": "../../lib/ui/react"
+    },
+    {
+      "path": "../../lib/auth"
+    },
+    {
       "path": "../../lib/api-fetch"
     },
     {

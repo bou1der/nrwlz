@@ -1,0 +1,23 @@
+{
+  "files": [],
+  "include": [],
+  "compilerOptions": {
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../styles"
+    },
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
+  "extends": "../../../tsconfig.base.json"
+}

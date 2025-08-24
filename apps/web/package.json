@@ -10,6 +10,8 @@
     "@tanstack/router-vite-plugin": "~1.131.27",
     "dotenv": "~17.2.1",
     "@nrwlz/api-fetch": "workspace:*",
-    "@nrwlz/auth": "workspace:*"
+    "@nrwlz/auth": "workspace:*",
+    "@nrwlz/react-ui": "workspace:*",
+    "@nrwlz/styles": "workspace:*"
   }
 }

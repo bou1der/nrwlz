@@ -32,6 +32,12 @@
     },
     {
       "path": "./lib/auth"
+    },
+    {
+      "path": "./lib/ui/react"
+    },
+    {
+      "path": "./lib/ui/styles"
     }
   ]
 }

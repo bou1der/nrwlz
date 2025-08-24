@@ -37,7 +37,8 @@
       "exclude": [
         "@nrwlz/modules/*",
         "lib/template/*",
-        "lib/modules/*"
+        "lib/modules/*",
+        "lib/ui/styles/*"
       ]
     },
     {
@@ -90,7 +91,8 @@
     {
       "plugin": "@nx/js/typescript",
       "include": [
-        "lib/template/*"
+        "lib/template/*",
+        "lib/ui/styles/*"
       ],
       "options": {
         "typecheck": {
@@ -174,7 +176,8 @@
       },
       "library": {
         "style": "tailwind",
-        "linter": "none"
+        "linter": "none",
+        "unitTestRunner": "jest"
       }
     },
     "@nx/angular:application": {

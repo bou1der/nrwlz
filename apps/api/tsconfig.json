@@ -10,6 +10,9 @@
   },
   "references": [
     {
+      "path": "../../lib/auth"
+    },
+    {
       "path": "../../lib/shared"
     },
     {

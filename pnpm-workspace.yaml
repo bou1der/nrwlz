@@ -1,18 +1,19 @@
 packages:
-  - packages/*
-  - apps/*
-  - lib/*
-  - '@nrwlz/*'
-
+  - "packages/*"
+  - "apps/*"
+  - "lib/*"
+  - "@nrwlz/*"
+  - "@nrwlz/ui/*"
+  - "lib/ui/*"
 onlyBuiltDependencies:
-  - '@nestjs/core'
-  - '@parcel/watcher'
-  - '@scarf/scarf'
-  - '@swc/core'
-  - '@tailwindcss/oxide'
-  - esbuild
-  - lmdb
-  - msgpackr-extract
-  - nx
-  - sharp
-  - unrs-resolver
+  - "@nestjs/core"
+  - "@parcel/watcher"
+  - "@scarf/scarf"
+  - "@swc/core"
+  - "@tailwindcss/oxide"
+  - "esbuild"
+  - "lmdb"
+  - "msgpackr-extract"
+  - "nx"
+  - "sharp"
+  - "unrs-resolver"

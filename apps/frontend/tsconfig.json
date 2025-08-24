@@ -17,6 +17,9 @@
   "include": [],
   "references": [
     {
+      "path": "../../lib/auth"
+    },
+    {
       "path": "../../lib/api-fetch"
     },
     {

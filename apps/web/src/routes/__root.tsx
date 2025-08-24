@@ -1,6 +1,5 @@
-/// <reference types="vite/client" />
-import type { ReactNode } from 'react'
-import "../styles.css"
+import type { ReactNode } from 'react';
+import "@nrwlz/styles/global";
 import {
   Outlet,
   createRootRoute,
@@ -36,7 +35,7 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html>
+    <>
       <head>
         <HeadContent />
       </head>
@@ -44,6 +43,6 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         {children}
         <Scripts />
       </body>
-    </html>
+    </>
   )
 }

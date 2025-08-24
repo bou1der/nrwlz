@@ -1,0 +1,23 @@
+{
+  "name": "@nrwlz/styles",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    "./variables": {
+      "import": "./src/variables.css",
+      "default": "./src/variables.css"
+    },
+    "./global": {
+      "import": "./src/global.css",
+      "default": "./src/global.css"
+    },
+    "./preset": {
+      "types": "./src/tailwind.ts",
+      "import": "./src/tailwind.ts",
+      "default": "./src/tailwind.ts"
+    }
+  },
+  "dependencies": {}
+}
