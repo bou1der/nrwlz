@@ -4,7 +4,7 @@ import { createAuthClient } from "better-auth/client"
 import { inferAdditionalFields, adminClient } from "better-auth/client/plugins";
 
 export const authClient = createAuthClient({
-  baseURL: import.meta.env.API_URL,
+  baseURL: import.meta.env.VITE_API_URL,
   plugins: [
     inferAdditionalFields<AuthOptions>(),
     adminClient(),

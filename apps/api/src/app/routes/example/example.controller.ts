@@ -13,5 +13,6 @@ export class ExampleController {
   async all(@Query() query: FiltersSchema) {
     // this.db.createQueryBuilder()
     //   .select()
+    return "hello example"
   }
 }

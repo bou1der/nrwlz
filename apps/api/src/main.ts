@@ -1,12 +1,22 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger, Module, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { generateOpenApiSpecs } from './public/openapi';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpError } from '@nrwlz/shared';
+import cors from 'cors';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
+@Module({
+  imports: [ConfigModule],
+})
+class Bootstrap { }
 
 async function bootstrap() {
+  const ctx = await NestFactory.create(Bootstrap);
+  const env = ctx.get(ConfigService)
+  await ctx.close()
+
   const app = await NestFactory.create(AppModule);
   const port = process.env.PORT || 8000;
 
@@ -16,6 +26,10 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+
+  app.use(cors({
+    origin: JSON.parse(env.get("TRUSTED_ORIGINS") ?? "[]"),
+  }))
 
   const swagger = SwaggerModule.createDocument(
     app,

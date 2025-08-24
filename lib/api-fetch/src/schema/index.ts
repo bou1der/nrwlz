@@ -75,7 +75,12 @@ export type $defs = Record<string, never>;
 export interface operations {
     ExampleController_all: {
         parameters: {
-            query?: never;
+            query?: {
+                ids?: string[] | null;
+                search?: string | null;
+                offset?: number;
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
