@@ -26,7 +26,6 @@
             pnpm install
           fi
 
-          alias nx="nx"
           alias dev="nx run-many --target=serve --all"
         '';
       };

@@ -1,4 +1,4 @@
-import { createClient, fd } from "@nrwlz/api-fetch"
+import { createClient } from "@nrwlz/api-fetch"
 
 export class ApiProvider {
   // private readonly http = inject(HttpClient)
