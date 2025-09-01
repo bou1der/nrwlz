@@ -112,7 +112,7 @@ export const typeormAdapter =
               useDatabaseGeneratedId || action === "update"
                 ? {}
                 : {
-                  id: options.advanced?.generateId ? options.advanced.generateId({ model }) : data.id || generateId(),
+                  id: options.advanced?.generateId ? options.advanced.generateId({ model }) : data["id"] || generateId(),
                 };
 
             const modelSchema = schema[model];
@@ -137,11 +137,10 @@ export const typeormAdapter =
             select: string[] = [],
           ): Record<string, unknown> | null {
             if (!data) return null;
-
             const transformedData: Record<string, unknown> =
-              data.id || data._id
+              data["id"] || data["_id"]
                 ? select.length === 0 || select.includes("id")
-                  ? { id: data.id || data._id }
+                  ? { id: data["id"] || data["_id"] }
                   : {}
                 : {};
 

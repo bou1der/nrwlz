@@ -4,7 +4,7 @@ export const Route = createFileRoute('/')({
   component: NxWelcome,
 });
 
-function NxWelcome() {
+export function NxWelcome() {
   const title = "Welcome to Nx";
   return (
     <>
@@ -432,7 +432,7 @@ function NxWelcome() {
           <div id="welcome">
             <h1>
               <span> Hello there, </span>
-              Welcome {title} 👋
+              {title} 👋
             </h1>
           </div>
 
@@ -830,7 +830,7 @@ function NxWelcome() {
             </details>
           </div>
 
-          <p id="love">
+          <p id="love" >
             Carefully crafted with
             <svg
               fill="currentColor"

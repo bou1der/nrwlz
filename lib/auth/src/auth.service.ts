@@ -67,6 +67,7 @@ export class AuthService {
             getTempEmail: tg => `${getNameFromTelegram(tg)}@${env.get("NEXT_PUBLIC_DOMAIN")}`,
             getTempName: tg => `${getNameFromTelegram(tg)}`,
           },
+          token: env.getOrThrow("TELEGRAM_BOT_TOKEN"),
         }),
         admin(adminPluginConfig),
         ...(env.get("NODE_ENV") === "development" ? [openAPI()] : []),

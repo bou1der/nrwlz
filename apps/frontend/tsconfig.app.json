@@ -6,7 +6,8 @@
       "node"
     ],
     "lib": [
-      "dom"
+      "dom",
+      "es2022"
     ]
   },
   "include": [
@@ -20,6 +21,15 @@
     "src/**/*.spec.ts"
   ],
   "references": [
+    {
+      "path": "../../lib/ui/styles/tsconfig.lib.json"
+    },
+    {
+      "path": "../../lib/shared/tsconfig.lib.json"
+    },
+    {
+      "path": "../../lib/auth/tsconfig.lib.json"
+    },
     {
       "path": "../../lib/api-fetch/tsconfig.lib.json"
     }

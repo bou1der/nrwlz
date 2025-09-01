@@ -407,6 +407,9 @@ importers:
 
   lib/auth:
     dependencies:
+      '@nrwlz/auth':
+        specifier: workspace:*
+        version: 'link:'
       '@nrwlz/shared':
         specifier: workspace:*
         version: link:../shared

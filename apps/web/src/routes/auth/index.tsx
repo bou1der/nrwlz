@@ -3,7 +3,7 @@ import { Button } from "@nrwlz/react-ui"
 import { useQuery } from '@tanstack/react-query'
 import { api } from '~/lib/api'
 
-export const Route = createFileRoute('/auth/test')({
+export const Route = createFileRoute('/auth/')({
   component: RouteComponent,
 })
 

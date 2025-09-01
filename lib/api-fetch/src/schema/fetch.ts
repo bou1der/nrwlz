@@ -18,7 +18,7 @@ const options: OpenAPITSOptions = {
 
 async function fetchSchema() {
   const schema = await openapiTS(
-    process.env.API_URL ?? "http://localhost:8000/openapi/json",
+    process.env.API_URL ? `${process.env.API_URL}/openapi/json` : "http://localhost:8000/openapi/json",
     options,
   );
 

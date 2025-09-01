@@ -1,9 +1,11 @@
 import type { BetterAuthPlugin } from "better-auth";
 import { createAuthEndpoint } from "better-auth/plugins";
-import { InitData, parse, validate } from "@telegram-apps/init-data-node";
+import { type InitData, parse, validate } from "@telegram-apps/init-data-node";
 import { z } from "zod";
-import { Account, User } from "../entities";
+import type { Account, User } from "../entities";
 import { UserRoleEnum } from "@nrwlz/shared/types/user";
+
+type MaybePromise<T> = T | Promise<T>;
 
 const SESSION_MAX_AGE = 60 * 60 * 24 * 30;
 const cookie_name = "session_token";
@@ -17,13 +19,18 @@ export interface TelegramAuthOptions {
     getTempEmail: (telegramUser: NonNullable<InitData["user"]>) => string;
     getTempName: (telegramUser: NonNullable<InitData["user"]>) => string;
   };
-  // startParamEvent?: (data: {
-  //   user: typeof schema.user.$inferSelect;
-  //   startParam: URLSearchParams;
-  // }) => Promise<void>;
+  hooks?: {
+    create?: {
+      before?: (data: {
+        user: Partial<User>,
+        initData: InitData
+      }) => MaybePromise<Partial<User>>
+    }
+  },
+  token: string
 }
 
-export const telegramAuth = ({ templates }: TelegramAuthOptions) =>
+export const telegramAuth = ({ templates, hooks, token }: TelegramAuthOptions) =>
   ({
     id: "tg-mini-app-auth",
     schema: {
@@ -65,7 +72,7 @@ export const telegramAuth = ({ templates }: TelegramAuthOptions) =>
         },
         async ({ context, ...req }) => {
           try {
-            validate(req.body.initDataRaw, process.env.TELEGRAM_BOT_TOKEN as string);
+            validate(req.body.initDataRaw, token);
           } catch (_err) {
             if (_err instanceof Error) {
               context.logger.error(_err.message, _err.name, _err.cause)
@@ -114,18 +121,28 @@ export const telegramAuth = ({ templates }: TelegramAuthOptions) =>
             }))!;
           } else {
             const { id: _, ...data } = initData.user;
+
+            // const a = hooks?.create?.before?.({ user, initData })
+
+            let user_data: Partial<User> = {
+              ...data,
+              role: UserRoleEnum.user,
+              // name: templates.getTempName(initData.user),
+              email: templates.getTempEmail(initData.user),
+              emailVerified: false,
+              updatedAt: new Date(),
+              createdAt: new Date(),
+            }
+
+            if (hooks?.create?.before) {
+              user_data = {
+                ...user_data,
+                ...hooks?.create?.before?.({ user: user_data, initData })
+              }
+            }
             user = await context.adapter.create<Partial<User>, User>({
               model: "user",
-              data: {
-                // telegramId: initData.user.id.toString(),
-                ...data,
-                role: initData.user.id.toString() === process.env.MAIN_ADMIN_ID ? UserRoleEnum.admin : UserRoleEnum.user,
-                // name: templates.getTempName(initData.user),
-                email: templates.getTempEmail(initData.user),
-                emailVerified: false,
-                updatedAt: new Date(),
-                createdAt: new Date(),
-              },
+              data: user_data,
             });
             await context.adapter.create<Partial<Account>>({
               model: "account",
