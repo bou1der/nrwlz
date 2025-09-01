@@ -348,6 +348,9 @@ importers:
       '@nrwlz/shared':
         specifier: workspace:*
         version: link:../../lib/shared
+      '@nrwlz/styles':
+        specifier: workspace:*
+        version: link:../../lib/ui/styles
 
   apps/frontend-e2e: {}
 

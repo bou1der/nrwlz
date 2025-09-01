@@ -1,16 +1,18 @@
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-// import { NxWelcome } from './nx-welcome';
+import { Component } from '@angular/core';
+import { Route, RouterModule } from '@angular/router';
 
-// @Component({
-//   imports: [NxWelcome, RouterModule],
-//   selector: 'app-root',
-//   templateUrl: './app.html',
-//   styleUrl: './app.scss',
-// })
-@NgModule({
+
+@Component({
   imports: [RouterModule],
+  selector: 'root',
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
 export class App {
   protected title = 'frontend';
+}
+
+export const rootRoute: Route = {
+  path: '',
+  component: App
 }

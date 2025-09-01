@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-nx-welcome',
+  // templateUrl: './app.html',
   imports: [CommonModule],
   template: `
     <!--

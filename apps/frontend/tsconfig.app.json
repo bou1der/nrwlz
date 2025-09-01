@@ -21,12 +21,6 @@
   ],
   "references": [
     {
-      "path": "../../lib/shared/tsconfig.lib.json"
-    },
-    {
-      "path": "../../lib/auth/tsconfig.lib.json"
-    },
-    {
       "path": "../../lib/api-fetch/tsconfig.lib.json"
     }
   ]

@@ -17,5 +17,10 @@ function RouteComponent() {
     },
   })
 
-  return <Button disabled={isPending}> Test button</Button>
+  return (
+    <div>
+      <h1 className="text-background">Test</h1>
+      <Button disabled={isPending}> Test button</Button>
+    </div>
+  )
 }

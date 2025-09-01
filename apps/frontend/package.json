@@ -8,6 +8,7 @@
   "dependencies": {
     "@nrwlz/api-fetch": "workspace:*",
     "@nrwlz/auth": "workspace:*",
-    "@nrwlz/shared": "workspace:*"
+    "@nrwlz/shared": "workspace:*",
+    "@nrwlz/styles": "workspace:*"
   }
 }
