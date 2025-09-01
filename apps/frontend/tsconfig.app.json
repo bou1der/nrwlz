@@ -11,7 +11,7 @@
   },
   "include": [
     "./src/main.ts",
-    "./src/**/*.ts"
+    "./**/*.ts"
   ],
   "exclude": [
     "jest.config.ts",
@@ -20,6 +20,9 @@
     "src/**/*.spec.ts"
   ],
   "references": [
+    {
+      "path": "../../lib/shared/tsconfig.lib.json"
+    },
     {
       "path": "../../lib/auth/tsconfig.lib.json"
     },

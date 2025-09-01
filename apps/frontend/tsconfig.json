@@ -4,7 +4,12 @@
     "emitDeclarationOnly": false,
     "noPropertyAccessFromIndexSignature": true,
     "moduleResolution": "bundler",
-    "module": "preserve"
+    "module": "preserve",
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -16,6 +21,9 @@
   "files": [],
   "include": [],
   "references": [
+    {
+      "path": "../../lib/shared"
+    },
     {
       "path": "../../lib/auth"
     },

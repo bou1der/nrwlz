@@ -345,6 +345,9 @@ importers:
       '@nrwlz/auth':
         specifier: workspace:*
         version: link:../../lib/auth
+      '@nrwlz/shared':
+        specifier: workspace:*
+        version: link:../../lib/shared
 
   apps/frontend-e2e: {}
 
