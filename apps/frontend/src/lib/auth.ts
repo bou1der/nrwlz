@@ -1,20 +1,22 @@
 import type { AuthOptions } from "@nrwlz/auth/types"
-import { telegramAuthClient } from "@nrwlz/auth/plugins/client"
-import { ClientOptions, createAuthClient } from "better-auth/client"
+// import { telegramAuthClient } from "@nrwlz/auth/plugins/client"
+import { createAuthClient } from "better-auth/client"
 import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
 import { Injectable } from "@angular/core";
 
 
 const options = {
   baseURL: "http://localhost:8000",
+  basePath: "/auth",
   plugins: [
     inferAdditionalFields<AuthOptions>(),
     adminClient(),
-    telegramAuthClient()
+    // telegramAuthClient()
   ]
-} satisfies ClientOptions
+}
 
-@Injectable()
+
+@Injectable({ providedIn: "root" })
 export class AuthProvider {
   client: ReturnType<typeof createAuthClient<typeof options>>
   constructor() {

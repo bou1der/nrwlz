@@ -5,6 +5,7 @@ import { SignedInGuard } from "../../lib/guards/signedIn.guard";
 
 @Component({
   selector: "not-found",
+  providers: [SignedInGuard],
   styleUrls: ["./not-found.scss"],
   template: `
     <div class="not-found_container">
@@ -18,8 +19,4 @@ export class NotFoundPage { }
 export const notFoundRoute: Route = {
   path: "**",
   component: NotFoundPage,
-  canActivate: [SignedInGuard],
-  data: {
-    isSignedIn: true
-  }
 }

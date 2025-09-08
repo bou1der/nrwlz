@@ -29,6 +29,9 @@ async function bootstrap() {
 
   app.use(cors({
     origin: JSON.parse(env.get("TRUSTED_ORIGINS") ?? "[]"),
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
   }))
 
   const swagger = SwaggerModule.createDocument(
