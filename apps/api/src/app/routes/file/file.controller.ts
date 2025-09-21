@@ -19,7 +19,8 @@ export class FileController {
     private readonly s3: S3,
     @InjectDataSource() private readonly db: DataSource,
     @Inject() private readonly fileProvider: FileProvider,
-  ) { }
+  ) {
+  }
 
   @ApiNotFoundResponse({
     description: "Image not found",

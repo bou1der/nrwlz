@@ -62,12 +62,18 @@ importers:
       axios:
         specifier: ~1.11.0
         version: 1.11.0
+      body-parser:
+        specifier: ^2.2.0
+        version: 2.2.0
       class-transformer:
         specifier: ~0.5.1
         version: 0.5.1
       class-validator:
         specifier: ~0.14.2
         version: 0.14.2
+      grammy:
+        specifier: ^1.38.2
+        version: 1.38.2(encoding@0.1.13)
       react:
         specifier: ~19.0.0
         version: 19.0.0
@@ -195,6 +201,9 @@ importers:
       '@testing-library/react':
         specifier: 16.1.0
         version: 16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.0)(@types/react@19.0.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@types/body-parser':
+        specifier: ^1.19.6
+        version: 1.19.6
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
@@ -407,9 +416,6 @@ importers:
 
   lib/auth:
     dependencies:
-      '@nrwlz/auth':
-        specifier: workspace:*
-        version: 'link:'
       '@nrwlz/shared':
         specifier: workspace:*
         version: link:../shared
@@ -2185,6 +2191,9 @@ packages:
 
   '@fastify/busboy@3.2.0':
     resolution: {integrity: sha512-m9FVDXU3GT2ITSe0UaMA5rU3QkfC/UXtCU8y0gSN/GugTqtVldOBWIB5V6V3sbmenVZUIpU6f+mPEO2+m5iTaA==}
+
+  '@grammyjs/types@3.22.1':
+    resolution: {integrity: sha512-QJX0Y8lpjE+/nuTKGmxybKmvdrLHV7gqbhI/UXoWlJLWtowbwk+oW+ngfHKwegD+ewL2SX8+tQo/1E14Ma0qlw==}
 
   '@hookform/resolvers@5.2.1':
     resolution: {integrity: sha512-u0+6X58gkjMcxur1wRWokA7XsiiBJ6aK17aPZxhkoYiK5J+HcTx0Vhu9ovXe6H+dVpO6cjrn2FkJTryXEMlryQ==}
@@ -7298,6 +7307,10 @@ packages:
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+
+  grammy@1.38.2:
+    resolution: {integrity: sha512-11O8rA3kt54Avk6cIyqdXFphkq1fbFz9Vh8hbbj8vid0VqJbZ4Yz2fpqDeaDONxnX3h9NdE/JGMk7VHVtmwKuQ==}
+    engines: {node: ^12.20.0 || >=14.13.1}
 
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
@@ -14718,6 +14731,8 @@ snapshots:
 
   '@fastify/busboy@3.2.0': {}
 
+  '@grammyjs/types@3.22.1': {}
+
   '@hookform/resolvers@5.2.1(react-hook-form@7.62.0(react@19.0.0))':
     dependencies:
       '@standard-schema/utils': 0.3.0
@@ -21224,6 +21239,16 @@ snapshots:
   gopd@1.2.0: {}
 
   graceful-fs@4.2.11: {}
+
+  grammy@1.38.2(encoding@0.1.13):
+    dependencies:
+      '@grammyjs/types': 3.22.1
+      abort-controller: 3.0.0
+      debug: 4.4.1(supports-color@10.2.0)
+      node-fetch: 2.7.0(encoding@0.1.13)
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
 
   graphemer@1.4.0: {}
 

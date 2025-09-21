@@ -1,23 +1,28 @@
 import { createClient } from "redis";
-import { Global, Module } from "@nestjs/common";
+import { Global, Injectable, Module, OnModuleInit } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 
-export const REDIS = "s3-adapter";
-export type Redis = ReturnType<typeof createClient>;
+@Injectable()
+export class Redis implements OnModuleInit {
+  public readonly api: ReturnType<typeof createClient>;
+  constructor(private configService: ConfigService) {
+    const url = this.configService.getOrThrow('REDIS_URL');
+    this.api = createClient({ url });
+  }
+  async onModuleInit() {
+    await this.api.connect()
+  }
+}
 
 @Global()
 @Module({
   imports: [ConfigModule],
   providers: [
     {
-      provide: REDIS,
-      inject: [ConfigService],
-      useFactory: async (env: ConfigService) => {
-        const redis = createClient({ url: env.getOrThrow("REDIS_URL") });
-        return await redis.connect();
-      },
+      provide: Redis,
+      useClass: Redis,
     },
   ],
-  exports: [REDIS],
+  exports: [Redis],
 })
 export class RedisModule { }

@@ -1,10 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { authClient } from '~/lib/auth-client';
 
 export const Route = createFileRoute('/')({
   component: NxWelcome,
 });
 
 export function NxWelcome() {
+  authClient.getSession().then((res) => console.log(res))
   const title = "Welcome to Nx";
   return (
     <>

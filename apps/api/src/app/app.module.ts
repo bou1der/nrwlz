@@ -9,7 +9,7 @@ import { AuthModule } from "@nrwlz/auth"
     RedisModule,
     S3Module,
     TypeOrm,
-    AuthModule
+    AuthModule,
     // MikroORM.forRoot(),
     // MikroOrmModule.forFeature([TestEntity])
   ],

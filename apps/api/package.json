@@ -79,6 +79,32 @@
         "options": {
           "passWithNoTests": true
         }
+      },
+      "container": {
+        "executor": "@nx-tools/nx-container:build",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "engine": "docker",
+          "context": "{workspaceRoot}",
+          "file": "apps/api/Dockerfile"
+        },
+        "configurations": {
+          "development": {
+            "tags": [
+              "api:latest"
+            ],
+            "push": false
+          },
+          "production": {
+            "tags": [
+              "my.image-registry.com/api:latest"
+            ],
+            "push": true
+          }
+        }
       }
     }
   },
