@@ -10,49 +10,23 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
-      "@lrp/auth/client": [
-        "libs/auth/client/src/index.ts"
-      ],
-      "@lrp/auth/server": [
-        "libs/auth/server/src/index.ts"
-      ],
-      "@lrp/db": [
-        "libs/db/src/index.ts"
-      ],
-      "@lrp/db/*": [
-        "libs/db/src/*/index.ts"
-      ],
-      "@lrp/redis": [
-        "libs/redis/src/index.ts"
-      ],
-      "@lrp/s3": [
-        "libs/s3/src/index.ts"
-      ],
-      "@lrp/server": [
-        "libs/auth/server/src/index.ts"
-      ],
-      "@lrp/shared": [
-        "libs/shared/src/index.ts"
-      ],
-      "@lrp/telegram/bot": [
-        "libs/telegram/bot/src/index.ts"
-      ],
-      "@lrp/api/schema": [
-        "./__generated__/openapi.d.ts"
-      ]
+      "@lrp/api/schema": ["./__generated__/openapi.d.ts"],
+      "@lrp/auth/client": ["libs/auth/client/src/index.ts"],
+      "@lrp/auth/server": ["libs/auth/server/src/index.ts"],
+      "@lrp/db": ["libs/db/src/index.ts"],
+      "@lrp/db/*": ["libs/db/src/*/index.ts"],
+      "@lrp/redis": ["libs/redis/src/index.ts"],
+      "@lrp/s3": ["libs/s3/src/index.ts"],
+      "@lrp/server": ["libs/auth/server/src/index.ts"],
+      "@lrp/shared": ["libs/shared/src/index.ts"],
+      "@lrp/telegram/bot": ["libs/telegram/bot/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }
