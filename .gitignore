@@ -4,6 +4,10 @@
 dist
 tmp
 out-tsc
+__generated__
+.vscode
+.angular
+old
 
 # dependencies
 node_modules
