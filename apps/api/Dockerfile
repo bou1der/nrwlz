@@ -1,27 +1,32 @@
 FROM docker.io/node:lts-alpine as dependencies
+ENV CI=true
+ENV PORT 8000
 ENV PNPM_HOME="/pnpm"
 ENV NODE_ENV=production
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
+FROM dependencies  as install
+WORKDIR /usr/src/app
+COPY package.json .
+COPY pnpm-lock.yaml .
+RUN pnpm install --frozen-lockfile
+
+FROM dependencies as build
 RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY . .
-RUN pnpm install --prod --frozen-lockfile
-RUN pnpm deploy --legacy --prod ./prod/ --filter=@nrwlz/api
+COPY --from=install /usr/src/app/node_modules node_modules
+RUN pnpm nx build api --configuration=production
 
-# # Production image, copy all the files and run next
-FROM docker.io/node:lts-alpine as runner
+FROM dependencies as runner
 RUN apk add --no-cache dumb-init
-ENV NODE_ENV production
-ENV PORT 8000
 WORKDIR /usr/src/app
-
-COPY --from=dependencies /usr/src/app/node_modules node_modules
-COPY --from=dependencies /usr/src/app/prod/dist .
-
-RUN ls -a 
-RUN sleep 10
+COPY --from=install /usr/src/app/node_modules node_modules
+COPY --from=build /usr/src/app/dist/apps/api .
+COPY --from=build /usr/src/app/package.json ./package.json
+COPY --from=build /usr/src/app/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN pnpm install --frozen-lockfile --prod
 
 RUN chown -R node:node .
 USER node

@@ -2,8 +2,8 @@ const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
 import { join } from "path";
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-   darkMode: ["class"],
+export default {
+  darkMode: ["class"],
   content: [
     join(
       __dirname,
@@ -12,17 +12,17 @@ module.exports = {
     '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}',
     ...createGlobPatternsForDependencies(__dirname),
   ],
-    theme: {
-       container: {
-         center: true,
-         padding: "1.25rem",
-          screens: {
-           "2xl": "1400px",
-        },
+  theme: {
+    container: {
+      center: true,
+      padding: "1.25rem",
+      screens: {
+        "2xl": "1400px",
+      },
     },
-       extend: {
-         spacing: {
-           navbar: "4.375rem",
+    extend: {
+      spacing: {
+        navbar: "4.375rem",
       },
       height: {
         "screen-navbar": "calc(100svh - var(--nav-height))",

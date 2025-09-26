@@ -5,6 +5,7 @@ onlyBuiltDependencies:
   - '@parcel/watcher'
   - '@scarf/scarf'
   - '@swc/core'
+  - core-js-pure
   - esbuild
   - lmdb
   - msgpackr-extract
