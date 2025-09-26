@@ -17,7 +17,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY . .
 COPY --from=install /usr/src/app/node_modules node_modules
-RUN pnpm nx build api --configuration=production
+RUN pnpm nx build api
 
 FROM dependencies as runner
 RUN apk add --no-cache dumb-init

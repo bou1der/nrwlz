@@ -1,6 +1,7 @@
 import type { BetterAuthPlugin } from "better-auth";
 import { createAuthEndpoint } from "better-auth/plugins";
-import { type InitData, parse, validate } from "@telegram-apps/init-data-node";
+import { InitData } from "@telegram-apps/sdk";
+import { parse, validate } from "@tma.js/init-data-node"
 import { z } from "zod";
 import type { Account, User } from "../entities";
 import { UserRoleEnum } from "@lrp/shared";
@@ -12,7 +13,7 @@ const cookie_name = "session_token";
 const provider_id = "telegram";
 
 export const getNameFromTelegram = (user: NonNullable<InitData["user"]>) =>
-  user.username || `${user.firstName} ${user.lastName}`;
+  user.username || `${user.first_name} ${user.last_name}`;
 
 export interface TelegramAuthOptions {
   templates: {
@@ -122,8 +123,6 @@ export const telegramAuth = ({ templates, hooks, token }: TelegramAuthOptions) =
           } else {
             const { id: _, ...data } = initData.user;
 
-            // const a = hooks?.create?.before?.({ user, initData })
-
             let user_data: Partial<User> = {
               ...data,
               role: UserRoleEnum.user,
@@ -179,7 +178,10 @@ export const telegramAuth = ({ templates, hooks, token }: TelegramAuthOptions) =
               console.error(err)
             }
           }
-          const session = await context.internalAdapter.createSession(user.id, req.headers, false);
+          const session = await context.internalAdapter.createSession(user.id, {
+            ...req,
+            context
+          }, false);
           await req.setSignedCookie(cookie.name, session.token, context.secret, cookie.attributes);
           return req.json({
             ok: true,
