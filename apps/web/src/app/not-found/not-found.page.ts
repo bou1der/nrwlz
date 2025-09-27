@@ -4,7 +4,7 @@ import { Route } from "@angular/router";
 
 
 @Component({
-  selector: "not-found",
+  selector: "app-not-found",
   // providers: [SignedInGuard],
   styleUrls: ["./not-found.scss"],
   template: `

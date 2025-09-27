@@ -29,6 +29,9 @@ export default [
   {
     files: ['**/*.html'],
     // Override or add rules here
-    rules: {},
+    rules: {
+      "no-empty-function": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
+    },
   },
 ];

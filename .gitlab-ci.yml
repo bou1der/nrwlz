@@ -1,6 +1,6 @@
 stages:
   - test
-  # - build
+  - build
   # - deploy
   # - migrate
 
@@ -11,10 +11,14 @@ variables:
   DOCKER_HOST: "tcp://localhost:2375"
   DOCKER_TLS_CERTDIR: ""
 
+include:
+  - local: "apps/api/.gitlab-ci.yml"
+
 # Main job
 test:
   image: node:18.17.1
   interruptible: true
+  stage: test
   only:
     - master
     - merge_requests

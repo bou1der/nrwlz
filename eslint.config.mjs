@@ -41,6 +41,9 @@ export default [
       '**/*.mjs',
     ],
     // Override or add rules here
-    rules: {},
+    rules: {
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
+    },
   },
 ];

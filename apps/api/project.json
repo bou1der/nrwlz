@@ -56,6 +56,16 @@
       ],
       "executor": "nx:noop"
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -b tsconfig.json",
+        "args": [
+          "--incremental"
+        ],
+        "cwd": "apps/api"
+      }
+    },
     "serve": {
       "continuous": true,
       "executor": "@nx/js:node",

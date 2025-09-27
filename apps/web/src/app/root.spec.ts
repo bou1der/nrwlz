@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { Root } from './root';
-import { NxWelcome } from './nx-welcome';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Root, NxWelcome],
+      imports: [Root],
     }).compileComponents();
   });
 

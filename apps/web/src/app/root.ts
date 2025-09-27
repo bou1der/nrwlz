@@ -6,7 +6,7 @@ import { Route, RouterModule } from '@angular/router';
 @Component({
   imports: [RouterModule],
   // providers: [AuthProvider],
-  selector: 'root',
+  selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
