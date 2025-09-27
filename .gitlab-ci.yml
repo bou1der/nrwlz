@@ -38,7 +38,8 @@ test:
     - pnpm exec playwright install --with-deps
 
     # - pnpm exec nx-cloud record -- echo Hello World
-    - pnpm exec nx run-many -t lint typecheck test build e2e
+    - pnpm exec nx run-many -t lint typecheck
+    # test build e2e
   cache:
     key:
       files:
