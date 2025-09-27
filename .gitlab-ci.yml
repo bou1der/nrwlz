@@ -35,7 +35,7 @@ test:
     # Uncomment this line to enable task distribution
     # - pnpm dlx nx start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
 
-    - pnpm exec playwright install --with-deps
+    # - pnpm exec playwright install --with-deps
 
     # - pnpm exec nx-cloud record -- echo Hello World
     - pnpm exec nx run-many -t lint typecheck
