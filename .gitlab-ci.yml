@@ -1,5 +1,5 @@
 stages:
-  # - test
+  - test
   - build
   - deploy
   - migrate
@@ -12,7 +12,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""
 
 # Main job
-CI:
+test:
   image: node:20
   interruptible: true
   only:
