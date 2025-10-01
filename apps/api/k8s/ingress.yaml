@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tiktok-ingress
+  namespace: tiktok
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - telegram.booulder.xyz
+      secretName: tls-telegram-ingress
+  rules:
+    - host: telegram.booulder.xyz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tiktok-api
+                port:
+                  number: 8000

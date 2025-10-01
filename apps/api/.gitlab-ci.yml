@@ -7,6 +7,7 @@ build:
     - merge_requests
   services:
     - name: docker:dind
+      alias: docker
       command:
         [
           "--host=tcp://0.0.0.0:2375",
@@ -14,6 +15,25 @@ build:
           "--insecure-registry=gitlab-registry.git.svc.cluster.local:5000",
         ]
   script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker build -t gitlab-registry.git.svc.cluster.local:5000/$CI_PROJECT_PATH:$CI_COMMIT_SHA -f apps/api/Dockerfile .
-    - docker push gitlab-registry.git.svc.cluster.local:5000/$CI_PROJECT_PATH:$CI_COMMIT_SHA
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" gitlab-registry.git.svc.cluster.local:5000
+    - docker build -t gitlab-registry.git.svc.cluster.local:5000/$CI_PROJECT_PATH/api:$CI_COMMIT_SHA -f apps/api/Dockerfile .
+    - docker push gitlab-registry.git.svc.cluster.local:5000/$CI_PROJECT_PATH/api:$CI_COMMIT_SHA
+
+deploy:
+  stage: deploy
+  image: alpine/kubectl
+  script:
+    - cd "$CI_PROJECT_DIR/apps/api"
+    - pwd
+    - ./secrets.sh
+    # - kubectl delete secret tiktok-api-secrets -n tiktok || true
+    # - kubectl create secret generic tiktok-api-secrets --from-literal=REDIS_URL="$REDIS_URL" --from-literal=DATABASE_URL="$DATABASE_URL" -n tiktok
+    - kubectl delete secret regcred -n tiktok || true
+    - kubectl create secret docker-registry regcred --docker-server=registry.booulder.xyz --docker-username="$REGISTRY_USER" --docker-password="$REGISTRY_PASSWORD" --namespace=tiktok --dry-run=client -o yaml | kubectl apply -f -
+    - sed -i "s|registry.booulder.xyz/repo_url.*|registry.booulder.xyz/$CI_PROJECT_PATH/api:$CI_COMMIT_SHA|g" k8s/deployment.yaml
+    - kubectl apply -f k8s/deployment.yaml
+    # - kubectl apply -f k8s/ingress.yaml
+    - kubectl rollout restart deployment tiktok-api -n tiktok
+    - kubectl rollout status deployment tiktok-api -n tiktok
+  only:
+    - master

@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BeforeInsert, CreateDateColumn, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, CreateDateColumn, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { uuidv7 } from "uuidv7"
 
-export class CommonEntity {
+export class CommonEntity extends BaseEntity {
   @ApiProperty({
     type: String,
     format: "uuid",

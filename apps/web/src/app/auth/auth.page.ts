@@ -2,9 +2,8 @@ import { Component } from "@angular/core";
 
 
 @Component({
-  selector: "app-auth-page",
   template: `
-    <app-auth-page></app-auth-page>
+    <h1>Auth Page</h1>
   `
 })
 export class AuthPage { }

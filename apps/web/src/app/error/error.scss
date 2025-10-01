@@ -1,0 +1,11 @@
+.error-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.error_title {
+  color: var(--foreground);
+}

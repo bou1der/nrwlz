@@ -1,20 +1,47 @@
 import { UserRoleEnum } from "@lrp/shared";
+import { ApiProperty } from "@nestjs/swagger";
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({ name: "user" })
 export class User extends BaseEntity {
+  @ApiProperty({
+    type: String,
+    nullable: false,
+    format: "uuid",
+  })
   @PrimaryColumn({
     name: "id",
     type: "text",
   })
   id: string;
 
+  @ApiProperty({
+    type: String,
+    nullable: true,
+    description: "Telegram ID",
+  })
+  @Column({
+    unique: true,
+    type: "varchar",
+    length: 255,
+    nullable: true,
+  })
+  telegramId: string | null;
+
+  @ApiProperty({
+    type: String,
+    nullable: false,
+  })
   @Column({
     type: "text",
     name: "name",
   })
   name: string;
 
+  @ApiProperty({
+    type: String,
+    nullable: false,
+  })
   @Column({
     type: "text",
     name: "email",
@@ -22,6 +49,10 @@ export class User extends BaseEntity {
   })
   email: string;
 
+  @ApiProperty({
+    type: Boolean,
+    nullable: false,
+  })
   @Column({
     name: "emailVerified",
     type: "boolean",
@@ -42,6 +73,11 @@ export class User extends BaseEntity {
   // })
   // phoneNumberVerified: boolean;
 
+  @ApiProperty({
+    type: String,
+    nullable: true,
+    description: "Image URL",
+  })
   @Column({
     type: "text",
     nullable: true,
@@ -49,6 +85,10 @@ export class User extends BaseEntity {
   })
   image: string | null;
 
+  @ApiProperty({
+    enum: UserRoleEnum,
+    default: UserRoleEnum.user,
+  })
   @Column({
     type: "enum",
     enum: UserRoleEnum,
@@ -82,6 +122,10 @@ export class User extends BaseEntity {
   // )
   // referrals: User[];
 
+  @ApiProperty({
+    type: Boolean,
+    nullable: true,
+  })
   @Column({
     type: "boolean",
     nullable: true,
@@ -89,6 +133,10 @@ export class User extends BaseEntity {
   })
   banned: boolean | null;
 
+  @ApiProperty({
+    type: String,
+    nullable: true,
+  })
   @Column({
     type: "text",
     nullable: true,
@@ -96,6 +144,10 @@ export class User extends BaseEntity {
   })
   banReason: string | null;
 
+  @ApiProperty({
+    type: Date,
+    nullable: true,
+  })
   @Column({
     type: "timestamp",
     name: "banExpires",
@@ -103,12 +155,18 @@ export class User extends BaseEntity {
   })
   banExpires: Date | null;
 
+  @ApiProperty({
+    type: Date,
+  })
   @Column({
     type: "timestamp",
     name: "updatedAt",
   })
   updatedAt: Date;
 
+  @ApiProperty({
+    type: Date,
+  })
   @Column({
     type: "timestamp",
     name: "createdAt",

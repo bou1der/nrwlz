@@ -58,10 +58,19 @@
       "executor": "@angular/build:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "web:build:production"
+          "buildTarget": "web:build:production",
+          "allowedHosts": [
+            "tiktok.booulder.xyz"
+          ],
+          "proxyConfig": "{projectRoot}/proxy.js"
         },
         "development": {
-          "buildTarget": "web:build:development"
+          "buildTarget": "web:build:development",
+          "allowedHosts": [
+            "localhost:4200",
+            "mini.booulder.xyz"
+          ],
+          "proxyConfig": "{projectRoot}/proxy.js"
         }
       },
       "defaultConfiguration": "development"

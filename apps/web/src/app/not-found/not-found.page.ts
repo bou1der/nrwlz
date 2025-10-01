@@ -1,22 +1,23 @@
-import { Component } from "@angular/core";
-import { Route } from "@angular/router";
-// import { SignedInGuard } from "../../lib/guards/signedIn.guard";
+import { Location } from "@angular/common";
+import { Component, inject } from "@angular/core";
 
 
 @Component({
   selector: "app-not-found",
-  // providers: [SignedInGuard],
   styleUrls: ["./not-found.scss"],
   template: `
     <div class="not-found_container">
       <h1 class="not-found_code">404</h1>
       <h2>Page not found</h2>
+      <button mat-raised-button (click)="goBack()">Назад</button>
     </div>
   `
 })
-export class NotFoundPage { }
+export class NotFoundPage {
+  location = inject(Location)
 
-export const notFoundRoute: Route = {
-  path: "**",
-  component: NotFoundPage,
+  goBack() {
+    this.location.back()
+  }
 }
+

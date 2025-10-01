@@ -17,20 +17,20 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY . .
 COPY --from=install /usr/src/app/node_modules node_modules
-RUN pnpm nx build api
+RUN pnpm nx build api --no-cloud
 
-FROM dependencies as runner
-RUN apk add --no-cache dumb-init
+FROM dependencies
 WORKDIR /usr/src/app
 COPY --from=install /usr/src/app/node_modules node_modules
 COPY --from=build /usr/src/app/dist/apps/api .
 COPY --from=build /usr/src/app/package.json ./package.json
 COPY --from=build /usr/src/app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=build /usr/src/app/pnpm-workspace.yaml ./pnpm-workspace.yaml
 RUN pnpm install --frozen-lockfile --prod
 
-RUN chown -R node:node .
+# RUN chown -R node:node .
 USER node
 EXPOSE 8000
 
 # If you are using the custom server implementation:
-CMD ["dumb-init", "node", "main.js"]
+CMD ["node", "main.js"]

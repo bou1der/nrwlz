@@ -1,20 +1,22 @@
 stages:
   - test
   - build
-  # - deploy
+  - deploy
   # - migrate
-
-variables:
-  CI: "true"
-  REGISTRY: registry.booulder.xyz
-  IMAGE: $REGISTRY/$CI_PROJECT_PATH
-  DOCKER_HOST: "tcp://localhost:2375"
-  DOCKER_TLS_CERTDIR: ""
 
 include:
   - local: "apps/api/.gitlab-ci.yml"
 
-# Main job
+variables:
+  CI: true
+  NX_SKIP_NX_CACHE: true
+  NX_NO_CLOUD: true
+  IMAGE: $REGISTRY/$CI_PROJECT_PATH
+  REGISTRY: registry.booulder.xyz
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+
 test:
   image: node:18.17.1
   interruptible: true
@@ -38,7 +40,7 @@ test:
     # - pnpm exec playwright install --with-deps
 
     # - pnpm exec nx-cloud record -- echo Hello World
-    - pnpm exec nx run-many -t lint typecheck
+    - pnpm exec nx run-many -t lint typecheck --no-cloud --skip-nx-cache
     # test build e2e
   cache:
     key:

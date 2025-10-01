@@ -41,21 +41,6 @@ export const telegramAuth = ({ templates, hooks, token }: TelegramAuthOptions) =
           telegramId: {
             type: "string",
             unique: true,
-            required: true,
-          },
-          username: {
-            type: "string",
-            unique: true,
-            required: false,
-          },
-          firstName: {
-            type: "string",
-            unique: false,
-            required: true,
-          },
-          lastName: {
-            type: "string",
-            unique: false,
             required: false,
           },
         },
@@ -92,7 +77,7 @@ export const telegramAuth = ({ templates, hooks, token }: TelegramAuthOptions) =
               message: "Ошибка получения пользователя",
             });
 
-          const account = await context.adapter.findOne({
+          const account = await context.adapter.findOne<Account>({
             model: "account",
             where: [
               {
@@ -110,23 +95,26 @@ export const telegramAuth = ({ templates, hooks, token }: TelegramAuthOptions) =
           let user: User | null = null;
 
           if (account) {
+            // TODO проверить на null
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             user = (await context.adapter.findOne({
               model: "user",
               where: [
                 {
-                  field: "telegramId",
-                  value: initData.user.id.toString(),
+                  field: "id",
+                  value: account.userId,
                   operator: "eq",
                 },
               ],
             }))!;
           } else {
-            const { id: _, ...data } = initData.user;
+            const { id: telegramId, ...data } = initData.user;
 
             let user_data: Partial<User> = {
               ...data,
+              telegramId: telegramId.toString(),
               role: UserRoleEnum.user,
-              // name: templates.getTempName(initData.user),
+              name: templates.getTempName(initData.user),
               email: templates.getTempEmail(initData.user),
               emailVerified: false,
               updatedAt: new Date(),
@@ -148,7 +136,7 @@ export const telegramAuth = ({ templates, hooks, token }: TelegramAuthOptions) =
               data: {
                 accountId: initData.user.id.toString(),
                 providerId: provider_id,
-                user: user,
+                userId: user.id,
                 updatedAt: new Date(),
                 createdAt: new Date(),
               },

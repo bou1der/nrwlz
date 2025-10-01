@@ -1,17 +1,32 @@
-import openapiClient from "openapi-fetch"
+import openapiClient, { Client } from "openapi-fetch"
+//// @ts-expect-error проблема с билдом
 import type { paths } from "@lrp/api/schema"
+import { Injectable } from "@angular/core"
 
-export class ApiProvider {
-  // private readonly http = inject(HttpClient)
-  client: ReturnType<typeof openapiClient<paths>>
+export interface IApiClient extends Client<paths, `${string}/${string}`> {
+  fdSerializer<B extends {}>(body: B): FormData
+}
 
-  constructor() {
-    this.client = openapiClient({
-      baseUrl: "http://localhost:8000",
-      // process.env["API_URL"],
-      credentials: "include",
-    })
-  }
+@Injectable({
+  providedIn: 'root',
+})
+export class ApiProvider implements IApiClient {
+  private readonly client = openapiClient<paths>({
+    baseUrl: window.location.origin,
+    credentials: "include",
+  })
+
+  GET = this.client.GET
+  POST = this.client.POST
+  PUT = this.client.PUT
+  DELETE = this.client.DELETE
+  OPTIONS = this.client.OPTIONS
+  PATCH = this.client.PATCH
+  HEAD = this.client.HEAD
+  TRACE = this.client.TRACE
+  request = this.client.request
+  use = this.client.use
+  eject = this.client.eject
 
   fdSerializer<B extends {}>(body: B) {
     const fd = new FormData();
@@ -20,22 +35,4 @@ export class ApiProvider {
     }
     return fd;
   }
-
-  // createObservable<P extends keyof paths, M extends Methods<P>>(path:P, method:M) {
-  //   // this.http.request(new Request({
-  //   //   method,
-  //   //   url:path
-  //   // }))
-  //   // this.http[method](path)
-  // }
-
-  // async request<M extends Method, P extends Parameters<typeof this.client.request<M>>[1]>(method:M, path:P, ){
-  //   type a = Parameters<typeof this.client.request<M, "">>[1]
-  //
-  //   this.client.request("post", "/file")
-  //
-  // }
 }
-
-
-

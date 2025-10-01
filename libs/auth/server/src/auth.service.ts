@@ -3,14 +3,14 @@ import { admin, openAPI } from "better-auth/plugins";
 import { UserRoleEnum } from "@lrp/shared";
 import { AdminPlugin, adminPluginConfig } from "./plugins/admin";
 import { Global, Injectable } from "@nestjs/common";
-// import { getNameFromTelegram, telegramAuth } from "./plugins";
+import { getNameFromTelegram, telegramAuth } from "./plugins";
 import { ConfigService } from "@nestjs/config";
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 import { typeormAdapter } from "./adapters/typeorm.adapter";
 
 export type Plugins = [
-  // ReturnType<typeof telegramAuth>,
+  ReturnType<typeof telegramAuth>,
   AdminPlugin,
   ...BetterAuthPlugin[]
 ];
@@ -49,7 +49,7 @@ export class AuthService {
     this.client = betterAuth({
       secret: env.getOrThrow("AUTH_SECRET"),
       basePath: "/auth",
-      baseURL: env.getOrThrow("API_URL"),
+      // baseURL: env.getOrThrow("API_URL"),
       rateLimit: {
         enabled: env.getOrThrow("NODE_ENV") === "production",
         max: 100,
@@ -63,21 +63,26 @@ export class AuthService {
         useSecureCookies: true,
         crossSubDomainCookies: {
           enabled: true,
+          domain: ".booulder.xyz"
         },
       },
       database: typeormAdapter(db),
+      emailAndPassword: {
+        enabled: false,
+      },
       plugins: [
-        // telegramAuth({
-        //   templates: {
-        //     getTempEmail: tg => `${getNameFromTelegram(tg)}@${env.get("NEXT_PUBLIC_DOMAIN")}`,
-        //     getTempName: tg => `${getNameFromTelegram(tg)}`,
-        //   },
-        //   token: env.getOrThrow("TELEGRAM_BOT_TOKEN"),
-        // }),
+        telegramAuth({
+          templates: {
+            getTempEmail: tg => `${getNameFromTelegram(tg)}@example.com`,
+            getTempName: tg => `${getNameFromTelegram(tg)}`,
+          },
+          token: env.getOrThrow("TELEGRAM_BOT_TOKEN"),
+        }),
         admin(adminPluginConfig),
         ...(env.get("NODE_ENV") === "development" ? [openAPI()] : []),
       ],
-      trustedOrigins: JSON.parse(env.get("TRUSTED_ORIGINS") || "[]"),
+      trustedOrigins: ["*.booulder.xyz"],
+      // JSON.parse(env.get("TRUSTED_ORIGINS") || "[]"),
       ...additionalField,
     } satisfies AuthOptions);
   }
