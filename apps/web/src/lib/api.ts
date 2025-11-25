@@ -1,8 +1,8 @@
 import openapiClient, { Client } from "openapi-fetch"
 import type { paths, components } from "@lrp/api/schema"
-import { inject, Injectable } from "@angular/core"
+import { Injectable } from "@angular/core"
 import { ExtractSchemas } from "@lrp/shared/utils/entities"
-import { MatSnackBar } from "@angular/material/snack-bar"
+// import { MatSnackBar } from "@angular/material/snack-bar"
 
 export interface IApiClient extends Client<paths, `${string}/${string}`> {
   fdSerializer<B extends {}>(body: B): FormData
@@ -13,7 +13,6 @@ export type Schemas = ExtractSchemas<components>
   providedIn: 'root',
 })
 export class ApiProvider implements IApiClient {
-  snake = inject(MatSnackBar)
 
   private readonly client = openapiClient<paths>({
     baseUrl: `${window.location.origin}/api`,
@@ -42,11 +41,11 @@ export class ApiProvider implements IApiClient {
   }
 
   handleError(error: Schemas["HttpError"]) {
-    this.snake.open(Array.isArray(error.message) ? error.message[0] : error.message, "ок", {
-      duration: 4000,
-      politeness: "polite",
-      panelClass: ["error"]
-    })
+    // this.snake.open(Array.isArray(error.message) ? error.message[0] : error.message, "ок", {
+    //   duration: 4000,
+    //   politeness: "polite",
+    //   panelClass: ["error"]
+    // })
   }
 }
 

@@ -1,10 +1,8 @@
 import { Component, inject } from "@angular/core";
-import { MatButtonModule } from "@angular/material/button";
 import { ActivatedRoute, Router } from "@angular/router";
 
 
 @Component({
-  imports: [MatButtonModule],
   templateUrl: "./error.html",
   styleUrls: ["./error.scss"]
 })

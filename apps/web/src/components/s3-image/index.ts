@@ -1,14 +1,14 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+// import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
-  imports: [MatProgressSpinnerModule, CommonModule],
+  imports: [CommonModule],
   selector: "app-s3-image",
   template: `
     <div class="s3-image">
       <div class="overlay" *ngIf="loading">
-        <mat-spinner  [diameter]="diameter"></mat-spinner>
+        <!-- <mat-spinner  [diameter]="diameter"></mat-spinner> -->
       </div>
       <img
         [src]="src"

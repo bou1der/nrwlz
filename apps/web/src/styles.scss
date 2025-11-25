@@ -1,21 +1,8 @@
-@use '@angular/material' as mat;
-@use "@lrp/styles/scss";
-
 ::-webkit-scrollbar {
   display: none;
 }
 
 html {
-  @include mat.theme( //
-    ( //
-      color: ( //
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    ));
-
   scroll-behavior: smooth;
 }
 
@@ -26,7 +13,7 @@ body {
   font: var(--mat-sys-body-medium);
 
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 html,
@@ -40,3 +27,35 @@ body {
   overflow-x: scroll;
   padding: 12px;
 }
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  width: 100%;
+  display: inline-block;
+  height: fit-content;
+}
+
+// .skeleton {
+//   @keyframes pulse {
+//     0% {
+//       opacity: 1;
+//     }
+//
+//     50% {
+//       opacity: 0.5;
+//     }
+//
+//     100% {
+//       opacity: 1;
+//     }
+//   }
+//
+//   // background-color: var(--mat-sys-surface-dim) !important;
+//   // animation: pulse 1.5s ease-in-out infinite;
+// }

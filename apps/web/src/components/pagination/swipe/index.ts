@@ -1,11 +1,11 @@
 import { Directive, EventEmitter, HostListener, Input, Output, signal } from "@angular/core";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+// import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Directive({
   selector: '[appSwipePagination]',
-  providers: [
-    MatProgressSpinnerModule
-  ],
+  // providers: [
+  //   MatProgressSpinnerModule
+  // ],
 })
 export class SwipePaginationDirective {
   @Input({

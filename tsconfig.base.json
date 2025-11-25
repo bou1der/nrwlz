@@ -10,33 +10,70 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
-      "@lrp/api/schema": ["./__generated__/openapi.d.ts"],
-      "@lrp/auth/client": ["libs/auth/client/src/index.ts"],
-      "@lrp/auth/server": ["libs/auth/server/src/index.ts"],
-      "@lrp/db": ["libs/db/src/index.ts"],
-      "@lrp/db/*": ["libs/db/src/*/index.ts"],
-      "@lrp/logger": ["libs/logger/src/index.ts"],
-      "@lrp/redis": ["libs/redis/src/index.ts"],
-      "@lrp/s3": ["libs/s3/src/index.ts"],
-      "@lrp/shared/common/*": ["libs/shared/src/common/*.ts"],
-      "@lrp/shared/types/*": ["libs/shared/src/types/*.ts"],
-      "@lrp/shared/utils/*": ["libs/shared/src/utils/*.ts"],
-      "@lrp/styles/global": ["libs/ui/styles/src/global.css"],
-      "@lrp/styles/preset": ["./libs/ui/styles/src/tailwind.ts"],
-      "@lrp/styles/scss": ["libs/ui/styles/src/global.scss"],
-      "@lrp/styles/variables": ["libs/ui/styles/src/variables.css"],
-      "@lrp/telegram/bot": ["libs/telegram/bot/src/index.ts"],
-      "@lrp/telegram/client": ["libs/telegram/client/src/index.ts"],
-      "@lrp/throttler": ["libs/throttler/src/index.ts"],
-      "@lrp/uploader/transport": ["apps/uploader/transport/index.ts"],
-      "@lrp/web/*": ["apps/web/src/*"]
+      "@lrp/api/schema": [
+        "./__generated__/openapi.d.ts"
+      ],
+      "@lrp/auth/client": [
+        "libs/auth/client/src/index.ts"
+      ],
+      "@lrp/auth/server": [
+        "libs/auth/server/src/index.ts"
+      ],
+      "@lrp/db": [
+        "libs/db/src/index.ts"
+      ],
+      "@lrp/db/*": [
+        "libs/db/src/*/index.ts"
+      ],
+      "@lrp/logger": [
+        "libs/logger/src/index.ts"
+      ],
+      "@lrp/redis": [
+        "libs/redis/src/index.ts"
+      ],
+      "@lrp/s3": [
+        "libs/s3/src/index.ts"
+      ],
+      "@lrp/shared/common/*": [
+        "libs/shared/src/common/*.ts"
+      ],
+      "@lrp/shared/types/*": [
+        "libs/shared/src/types/*.ts"
+      ],
+      "@lrp/shared/utils/*": [
+        "libs/shared/src/utils/*.ts"
+      ],
+      "@lrp/styles/ng": [
+        "./libs/ui/styles/src/theme.ts"
+      ],
+      "@lrp/telegram/bot": [
+        "libs/telegram/bot/src/index.ts"
+      ],
+      "@lrp/telegram/client": [
+        "libs/telegram/client/src/index.ts"
+      ],
+      "@lrp/throttler": [
+        "libs/throttler/src/index.ts"
+      ],
+      "@lrp/uploader/transport": [
+        "apps/uploader/transport/index.ts"
+      ],
+      "@lrp/web/*": [
+        "apps/web/src/*"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

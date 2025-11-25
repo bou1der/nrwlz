@@ -7,6 +7,8 @@ import { AuthProvider } from '../lib/auth';
 import { provideTanStackQuery, QueryClient } from "@tanstack/angular-query-experimental"
 import { icons, LUCIDE_ICONS, LucideIconProvider } from 'lucide-angular';
 import { environment } from '../environments/environment';
+import { providePrimeNG } from 'primeng/config';
+import { GlobalNGPreset } from "@lrp/styles/ng"
 
 
 export const appConfig: ApplicationConfig = {
@@ -22,6 +24,14 @@ export const appConfig: ApplicationConfig = {
         }
       }
     })),
+    providePrimeNG({
+      theme: {
+        preset: GlobalNGPreset,
+        options: {
+          darkModeSelector: '.dark',
+        }
+      },
+    }),
     {
       provide: LUCIDE_ICONS,
       multi: true,
