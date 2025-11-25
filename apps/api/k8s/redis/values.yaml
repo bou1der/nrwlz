@@ -1,0 +1,53 @@
+# redis-values.yaml — точно как в твоих манифестах
+cluster:
+  nodes: 2 # replicas в StatefulSet
+  replicas: 0 # --cluster-replicas 0 (без реплик, как в твоём Job; для 1 — поставь 1)
+  init: true # Авто-инициализация кластера через Job
+
+# persistence:
+#   enabled: true
+#   storageClass: "local-path" # Твоя StorageClass
+#   size: 5Gi # requests.storage
+
+configuration: | # redis.conf — как в ConfigMap
+  appendonly yes
+  appendfsync everysec
+
+# StatefulSet: resources (как в твоём YAML)
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Service: headless (clusterIP: None)
+service:
+  type: ClusterIP
+  clusterIP: None # Headless для DNS
+
+# StatefulSet: labels и selector (app: redis)
+commonLabels:
+  app: redis
+primary:
+  labels:
+    app: redis
+  selectorLabels:
+    app: redis
+
+# Volume mounts: config → /usr/local/etc/redis, data → /data
+# (Bitnami монтирует автоматически из configuration)
+
+# Ports
+containerPorts:
+  redis: 6379
+
+# Namespace (если не solar — переопредели)
+namespace: solar
+
+auth:
+  enabled: false # Без пароля (как в гайде); для пароля — true + --set auth.password=secret
+
+# Init Job: ждёт ping + redis-cli --cluster create
+# (Bitnami делает это в cluster.init)

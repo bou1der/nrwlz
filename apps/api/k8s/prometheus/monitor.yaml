@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: api-metrics
+  namespace: $NAMESPACE
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: api
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+      scheme: http
+      authorization:
+        type: Bearer
+        credentials:
+          name: prometheus-api-secret
+          key: PROMETHEUS_KEY
+      metricRelabelings:
+        - action: replace
+          targetLabel: service
+          replacement: api
+        - action: replace
+          targetLabel: environment
+          replacement: production

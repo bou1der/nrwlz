@@ -6,7 +6,7 @@ import { getPlaiceholder } from "plaiceholder";
 import { uuidv7 } from "uuidv7";
 import { S3 } from "@lrp/s3";
 import { DataSource } from "typeorm";
-import { Files } from "./file.entity";
+import { IFiles } from "./file.entity";
 import { InjectDataSource } from "@nestjs/typeorm";
 
 @Injectable()
@@ -32,7 +32,7 @@ export class FileProvider {
       });
       if (res.$metadata.httpStatusCode !== 200) throw new InternalServerErrorException("Ошибка загрузки фотографии");
       await trx.createQueryBuilder().insert()
-        .into(Files)
+        .into(IFiles)
         .values({
           id,
           contentType: mime_type,

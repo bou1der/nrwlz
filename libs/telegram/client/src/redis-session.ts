@@ -1,4 +1,4 @@
-import { Redis } from "@lrp/redis";
+import { RedisClient as Redis } from "@lrp/redis";
 import { AuthKey } from "telegram/crypto/AuthKey";
 import { MemorySession } from "telegram/sessions";
 

@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({ name: "verification" })
-export class Verification {
+export class IVerification {
   @PrimaryColumn({
     name: "id",
     type: "text",

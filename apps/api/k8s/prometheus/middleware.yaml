@@ -1,0 +1,11 @@
+# k8s/prometheus/middleware.yaml
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: monitoring-ipallowlist
+  namespace: $NAMESPACE
+spec:
+  ipAllowList:
+    sourceRange:
+      - 46.150.174.46/32
+      - 90.156.254.95/32

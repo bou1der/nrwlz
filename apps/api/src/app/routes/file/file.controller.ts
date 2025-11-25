@@ -1,13 +1,14 @@
-import { Controller, Get, Inject, NotFoundException, Param, Post, Query, Res, UploadedFile } from "@nestjs/common";
+import { Controller, Get, Inject, NotFoundException, Param, Post, Query, StreamableFile, UploadedFile } from "@nestjs/common";
 import { ApiBody, ApiConsumes, ApiNotFoundResponse, ApiOkResponse, ApiProduces, ApiTags } from "@nestjs/swagger";
 import { FileCreateBody, FileCreateQuery } from "./file.dto";
 import { FileProvider } from "./file.provider";
 import { S3 } from "@lrp/s3"
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
-import { HttpError } from "@lrp/shared";
-import { Files } from "./file.entity";
-import type { Response } from "express"
+import { HttpError } from "@lrp/shared/types/error";
+import { IFiles } from "./file.entity";
+import { Readable } from "node:stream";
+import { ReadableStream } from "node:stream/web";
 
 @ApiTags("Files")
 @Controller({
@@ -31,10 +32,10 @@ export class FileController {
   })
   @ApiProduces("application/octet-stream")
   @Get("/:id")
-  async GET(@Param("id") id: string, @Res() res: Response): Promise<ReadableStream> {
+  async GET(@Param("id") id: string) {
     const file = await this.db.createQueryBuilder()
       .select()
-      .from(Files, "files")
+      .from(IFiles, "files")
       .where("id = :id", { id })
       .getOne()
     if (!file) throw new NotFoundException("Файл не найден");
@@ -42,9 +43,12 @@ export class FileController {
       Key: file.id,
     });
     if (!Body) throw new NotFoundException("Файл не найден");
-    res.setHeader("Content-Type", file.contentType);
-    res.setHeader("Content-Disposition", `attachment; filename="${encodeURIComponent(file.fileName)}"`);
-    return Body.transformToWebStream();
+
+    return new StreamableFile(Readable.fromWeb(Body.transformToWebStream() as ReadableStream), {
+      length: file.fileSize,
+      type: file.contentType,
+      disposition: `attachment;  filename="${encodeURIComponent(file.fileName)}"`,
+    })
   }
 
   // @hasRole([UserRoleEnum.admin])

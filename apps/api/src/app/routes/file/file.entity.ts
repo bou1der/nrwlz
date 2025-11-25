@@ -1,8 +1,12 @@
-import { CommonEntity } from "@lrp/shared";
+import { CommonEntity, ValuesEntity } from "@lrp/shared/common/common.entity";
 import { Column, Entity } from "typeorm";
 
 @Entity("files")
-export class Files extends CommonEntity {
+export class IFiles extends CommonEntity {
+  constructor(values?: ValuesEntity<IFiles>) {
+    super();
+    if (values) Object.assign(this, values);
+  }
 
   @Column({
     type: "text",

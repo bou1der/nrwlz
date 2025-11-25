@@ -1,25 +1,25 @@
-import { createClient } from "redis";
 import { Global, Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { Redis } from "ioredis";
 
-export type Redis = ReturnType<typeof createClient>
-
-export const REDIS = "redis"
-
+export class RedisClient extends Redis {
+  constructor(uri: string) {
+    super(uri)
+  }
+}
 @Global()
 @Module({
   imports: [ConfigModule],
   providers: [
     {
-      provide: REDIS,
+      provide: RedisClient,
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => {
-        const client = createClient({ url: config.getOrThrow('REDIS_URL') });
-        await client.connect()
+        const client = new RedisClient(config.getOrThrow('REDIS_URL'));
         return client;
       }
     },
   ],
-  exports: [REDIS],
+  exports: [RedisClient],
 })
 export class RedisModule { }

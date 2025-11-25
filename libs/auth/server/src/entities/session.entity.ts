@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({ name: "session" })
-export class Session extends BaseEntity {
+export class ISession extends BaseEntity {
   @PrimaryColumn({
     name: "id",
     type: "text",

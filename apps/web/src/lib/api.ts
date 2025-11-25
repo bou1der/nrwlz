@@ -1,18 +1,22 @@
 import openapiClient, { Client } from "openapi-fetch"
-//// @ts-expect-error проблема с билдом
-import type { paths } from "@lrp/api/schema"
-import { Injectable } from "@angular/core"
+import type { paths, components } from "@lrp/api/schema"
+import { inject, Injectable } from "@angular/core"
+import { ExtractSchemas } from "@lrp/shared/utils/entities"
+import { MatSnackBar } from "@angular/material/snack-bar"
 
 export interface IApiClient extends Client<paths, `${string}/${string}`> {
   fdSerializer<B extends {}>(body: B): FormData
 }
+export type Schemas = ExtractSchemas<components>
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiProvider implements IApiClient {
+  snake = inject(MatSnackBar)
+
   private readonly client = openapiClient<paths>({
-    baseUrl: window.location.origin,
+    baseUrl: `${window.location.origin}/api`,
     credentials: "include",
   })
 
@@ -28,6 +32,7 @@ export class ApiProvider implements IApiClient {
   use = this.client.use
   eject = this.client.eject
 
+
   fdSerializer<B extends {}>(body: B) {
     const fd = new FormData();
     for (const name in body) {
@@ -35,4 +40,14 @@ export class ApiProvider implements IApiClient {
     }
     return fd;
   }
+
+  handleError(error: Schemas["HttpError"]) {
+    this.snake.open(Array.isArray(error.message) ? error.message[0] : error.message, "ок", {
+      duration: 4000,
+      politeness: "polite",
+      panelClass: ["error"]
+    })
+  }
 }
+
+

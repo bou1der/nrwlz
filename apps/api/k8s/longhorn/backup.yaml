@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: longhorn-default-resource
+  namespace: longhorn-system
+data:
+  default-resource.yaml: |
+    "backup-target": "s3://boulder-personal-bucket@us-east-1/"
+    "backup-target-credential-secret": "yandex-longhorn-backup"  # Имя вашего Secret
+    "backupstore-poll-interval": "180"

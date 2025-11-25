@@ -1,17 +1,21 @@
 import { applyDecorators, HttpStatus, SetMetadata, createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { ApiResponse } from "@nestjs/swagger";
-import { HAS_ROLE, IS_SIGNED_IN, PubRequest } from "./auth.guard";
-import { HttpError, UserRoleEnum } from "@lrp/shared"
-import { UserSession } from ".";
+import { IRequest, AuthGuardMetadata } from "./auth.guard";
+import { UserRoleEnum } from "@lrp/shared/types/user"
+import { HttpError } from "@lrp/shared/types/error"
+import type { Session } from ".";
 
 export interface AuthDecoratorOptions {
   declare?: boolean;
 }
 
-export const isSignedIn = (arg: boolean, options: AuthDecoratorOptions | undefined = { declare: true }) => {
+export const isSignedIn = (arg: boolean, options: AuthDecoratorOptions | undefined = {
+  declare: true,
+}) => {
   const decorators: (ClassDecorator | MethodDecorator | PropertyDecorator)[] = [
-    SetMetadata(IS_SIGNED_IN, arg),
+    SetMetadata(AuthGuardMetadata.IS_SIGNED_IN, arg),
   ];
+
   if (arg === true && options?.declare) {
     decorators.push(ApiResponse({
       status: HttpStatus.FORBIDDEN,
@@ -19,27 +23,38 @@ export const isSignedIn = (arg: boolean, options: AuthDecoratorOptions | undefin
       type: HttpError,
     }));
   }
+
+
   return applyDecorators(
     ...decorators
   );
 }
 
-export const hasRole = (roles: UserRoleEnum[], options: AuthDecoratorOptions | undefined = { declare: true }) =>
-  applyDecorators(
-    SetMetadata(HAS_ROLE, roles),
-    ...(options?.declare
-      ? [
-        ApiResponse({
-          status: HttpStatus.FORBIDDEN,
-          description: `Forbidden: User access level: [${roles.join(", ")}]`,
-          type: HttpError,
-        }),
-      ]
-      : []),
-  );
+export const hasRole = (roles: UserRoleEnum[], options: AuthDecoratorOptions | undefined = {
+  declare: true,
+}) => {
+  const decorators: (ClassDecorator | MethodDecorator | PropertyDecorator)[] = [
+    SetMetadata(AuthGuardMetadata.HAS_ROLE, roles),
+  ];
 
-export const ExtractSession = createParamDecorator((_: unknown, ctx: ExecutionContext) => {
-  let session: UserSession | null = null;
+  if (options?.declare) {
+    decorators.push(ApiResponse({
+      status: HttpStatus.FORBIDDEN,
+      description: `Forbidden: User access level: [${roles.join(", ")}]`,
+      type: HttpError,
+    }));
+  }
+
+  return applyDecorators(
+    ...decorators
+  );
+}
+
+export const GetSession = createParamDecorator((_: unknown, ctx: ExecutionContext) => {
+  let session: Session<null> | Session = {
+    user: null,
+    session: null
+  };
 
   switch (ctx.getType()) {
     // case "graphql": {
@@ -48,7 +63,7 @@ export const ExtractSession = createParamDecorator((_: unknown, ctx: ExecutionCo
     //   break;
     // }
     default: {
-      session = ctx.switchToHttp().getRequest<PubRequest>().session;
+      session = ctx.switchToHttp().getRequest<IRequest>().session
       break;
     }
   }

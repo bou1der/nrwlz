@@ -1,16 +1,12 @@
-import { Component, inject } from "@angular/core";
-import { MatButtonModule } from "@angular/material/button";
-import { Router } from "@angular/router";
+import { Component } from "@angular/core"
 
 @Component({
-  imports: [MatButtonModule],
-  templateUrl: "./home.html",
-  styleUrls: ["./home.scss"],
+  imports: [
+  ],
+  template: `
+    <h1>Home</h1>
+  `,
+  styleUrl: "./home.scss",
 })
 export class HomeComponent {
-  router = inject(Router)
-
-  goAdmin() {
-    this.router.navigate(["/admin"])
-  }
 }

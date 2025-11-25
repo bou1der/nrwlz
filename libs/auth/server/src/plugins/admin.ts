@@ -1,4 +1,4 @@
-import { UserRoleEnum } from "@lrp/shared";
+import { UserRoleEnum } from "@lrp/shared/types/user";
 import { admin } from "better-auth/plugins";
 
 export const adminPluginConfig = {

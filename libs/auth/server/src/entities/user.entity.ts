@@ -1,9 +1,9 @@
-import { UserRoleEnum } from "@lrp/shared";
+import { UserRoleEnum } from "@lrp/shared/types/user";
 import { ApiProperty } from "@nestjs/swagger";
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({ name: "user" })
-export class User extends BaseEntity {
+export class IUser extends BaseEntity {
   @ApiProperty({
     type: String,
     nullable: false,
@@ -98,29 +98,21 @@ export class User extends BaseEntity {
   })
   role: UserRoleEnum;
 
-  // @ManyToOne(
-  // 	() => User,
-  // 	tb => tb.referrals,
-  // 	{
-  // 		nullable: true,
-  // 		onDelete: "SET NULL",
-  // 	},
-  // )
-  // @JoinColumn({
-  // 	name: "invited_by_id",
-  // })
-  // invitedBy: User | null;
-  //
-  // @Field(() => [User], {
-  // 	nullable: true,
-  // 	defaultValue: [],
-  // 	middleware: [accessMdw<User>("id")],
-  // })
-  // @OneToMany(
-  // 	() => User,
-  // 	tb => tb.invitedBy,
-  // )
-  // referrals: User[];
+  @Column({
+    type: "boolean",
+    default: false,
+  })
+  earnedByInviter: boolean
+
+  @ApiProperty({
+    type: Number,
+    description: "User balance"
+  })
+  @Column({
+    type: "double precision",
+    default: 0
+  })
+  balance: number;
 
   @ApiProperty({
     type: Boolean,
@@ -130,6 +122,7 @@ export class User extends BaseEntity {
     type: "boolean",
     nullable: true,
     name: "banned",
+    default: false,
   })
   banned: boolean | null;
 

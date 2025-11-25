@@ -1,41 +1,42 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: tiktok
----
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: image-puller
-  namespace: tiktok
+  namespace: $NAMESPACE
 imagePullSecrets:
   - name: regcred
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tiktok-api
-  namespace: tiktok
+  name: api
+  namespace: $NAMESPACE
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tiktok-api
+      app: api
   template:
     metadata:
       labels:
-        app: tiktok-api
+        app: api
     spec:
       serviceAccountName: image-puller
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: tiktok-api
+        - name: api
           imagePullPolicy: Always
-          image: registry.booulder.xyz/repo_url
+          image: $CI_REGISTRY_HOST/$IMAGE_NAME
           envFrom:
             - secretRef:
-                name: tiktok-api-secrets
+                name: api-secrets
+            - secretRef:
+                name: redis-secret
+            - secretRef:
+                name: prometheus-api-secret
+            - secretRef:
+                name: postgres-secret
           ports:
             - name: http
               containerPort: 8000
@@ -43,12 +44,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tiktok-api
-  namespace: tiktok
+  name: api
+  namespace: $NAMESPACE
 spec:
   type: ClusterIP
   selector:
-    app: tiktok-api
+    app: api
   ports:
     - name: http
       port: 8000

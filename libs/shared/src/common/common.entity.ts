@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseEntity, BeforeInsert, CreateDateColumn, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, CreateDateColumn, DeleteDateColumn, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { uuidv7 } from "uuidv7"
 
 export class CommonEntity extends BaseEntity {
@@ -13,6 +13,15 @@ export class CommonEntity extends BaseEntity {
     length: 255,
   })
   id: string;
+
+  @ApiProperty({
+    type: Date,
+    nullable: true,
+  })
+  @DeleteDateColumn({
+    type: "timestamp with time zone",
+  })
+  deletedAt: Date | null;
 
   @ApiProperty({
     type: Date,
@@ -36,5 +45,7 @@ export class CommonEntity extends BaseEntity {
       this.id = uuidv7()
     }
   }
-
+}
+export type ValuesEntity<T extends object> = Omit<T, keyof CommonEntity> & {
+  id?: string;
 }

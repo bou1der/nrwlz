@@ -5,14 +5,16 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
 }
 
 .not-found_code {
   font-size: 86px;
   line-height: 3.25rem;
-  margin: 0;
-  // min-height: 4rem;
-  // font-size: 8rem;
-  // font-weight: bold;
-  // color: var(--color-primary);
+}
+
+.not-found_message,
+.not-found_code {
+  text-align: center;
+  color: var(--mat-sys-primary);
 }

@@ -1,0 +1,12 @@
+.mini-app_wrapper {
+  // height: 100vh;
+  position: relative;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  @media (min-width: 640px) {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+}

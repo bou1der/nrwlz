@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mini-app-ingress
+  namespace: $NAMESPACE
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - $WEB_APP_DOMAIN
+      secretName: tls-mini-app-ingress
+  rules:
+    - host: $WEB_APP_DOMAIN
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mini-app
+                port:
+                  number: 80

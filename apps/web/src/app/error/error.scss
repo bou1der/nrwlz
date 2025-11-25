@@ -1,11 +1,22 @@
 .error-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+
   height: 100vh;
   width: 100vw;
 }
 
 .error_title {
-  color: var(--foreground);
+  color: var(--mat-sys-primary);
+  font-family: 700;
+  font-size: 28px;
+  text-align: center;
+  line-height: normal;
+}
+
+.back__button {
+  margin-top: 24px;
+  width: 50%;
 }

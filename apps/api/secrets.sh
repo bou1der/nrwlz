@@ -1,8 +1,9 @@
 #!/bin/sh
 
-ENV_FILE=".env.example"
-NAMESPACE="tiktok"
-SECRET_NAME="tiktok-api-secrets"
+ENV_FILE="$CWD/.env.prod.example"
+SECRET_NAME="api-secrets"
+
+./regcred.sh
 
 # Проверяем, существует ли файл
 if [ ! -f "$ENV_FILE" ]; then
@@ -19,15 +20,15 @@ while IFS= read -r line; do
   KEY=$(echo "$line" | cut -d'=' -f1 | xargs)
 
   if [ -z "$KEY" ]; then
-    echo "Предупреждение: Пустой ключ в строке '$line', пропускаем"
-    continue
+    echo "Пустой ключ в строке '$line', пропускаем"
+    exit 1
   fi
 
   VALUE=$(printenv "$KEY")
 
   if [ -z "$VALUE" ]; then
-    echo "Ошибка: Переменная окружения $KEY не задана"
-    continue
+    echo "Переменная окружения $KEY не задана"
+    exit 1
   fi
 
   SECRET_ARGS="$SECRET_ARGS --from-literal=$KEY=$VALUE"
@@ -40,6 +41,6 @@ kubectl create secret generic $SECRET_NAME \
   $SECRET_ARGS \
   --dry-run=client -o yaml | kubectl apply -f -
 
-if kubectl get secret $SECRET_NAME -n $NAMESPACE >/dev/null 2>&1; then
-  echo "Секрет $SECRET_NAME успешно создан в namespace $NAMESPACE"
+if kubectl get secret $SECRET_NAME -n $NAMESPACE >/dev/null 2>&1; then true
+  else exit 1
 fi

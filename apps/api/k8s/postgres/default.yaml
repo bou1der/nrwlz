@@ -1,0 +1,80 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: daily-backup
+  namespace: $NAMESPACE
+spec:
+  schedule: "0 2 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: postgres-cluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-cluster
+  namespace: $NAMESPACE
+spec:
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://boulder-personal-bucket/sunrise/
+      endpointURL: https://storage.yandexcloud.net
+      s3Credentials:
+        accessKeyId:
+          name: yandex-s3
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: yandex-s3
+          key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+        maxParallel: 8
+    retentionPolicy: "7d"
+
+  imageName: ghcr.io/cloudnative-pg/postgresql:15.2
+  instances: 3
+  startDelay: 300
+  stopDelay: 300
+  replicationSlots:
+    highAvailability:
+      enabled: true
+    updateInterval: 500
+  postgresql:
+    parameters:
+      shared_buffers: 256MB
+      pg_stat_statements.max: '10000'
+      pg_stat_statements.track: all
+      auto_explain.log_min_duration: '10s'
+    pg_hba:
+      - host all all all md5
+  logLevel: debug
+  storage:
+    storageClass: longhorn
+    size: 20Gi
+  walStorage:
+    storageClass: longhorn
+    size: 20Gi
+  monitoring:
+    enablePodMonitor: true
+  bootstrap:
+    initdb:
+      database: $NAMESPACE
+      owner: $NAMESPACE
+      secret:
+        name: postgres-secret
+
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "1"
+    limits:
+      memory: "2Gi"
+      cpu: "2"
+
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: failure-domain.beta.kubernetes.io/zone
+
+  nodeMaintenanceWindow:
+    inProgress: false
+    reusePVC: false

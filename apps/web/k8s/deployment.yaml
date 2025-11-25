@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: $NAMESPACE
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: image-puller
+  namespace: $NAMESPACE
+imagePullSecrets:
+  - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mini-app
+  namespace: $NAMESPACE
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mini-app
+  template:
+    metadata:
+      labels:
+        app: mini-app
+    spec:
+      serviceAccountName: image-puller
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: mini-app
+          imagePullPolicy: Always
+          image: $CI_REGISTRY_HOST/$IMAGE_NAME
+          ports:
+            - name: http
+              containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mini-app
+  namespace: $NAMESPACE
+spec:
+  type: ClusterIP
+  selector:
+    app: mini-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

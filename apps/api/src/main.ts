@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { generateOpenApiSpecs } from './public/openapi';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { HttpError } from "@lrp/shared";
+import { HttpError } from "@lrp/shared/types/error";
 import cors from 'cors';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import cookieParser from "cookie-parser";

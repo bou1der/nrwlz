@@ -1,13 +1,17 @@
-import { betterAuth, BetterAuthOptions, BetterAuthPlugin } from "better-auth";
+import { Adapter, betterAuth, BetterAuthOptions, BetterAuthPlugin, Logger } from "better-auth";
 import { admin, openAPI } from "better-auth/plugins";
-import { UserRoleEnum } from "@lrp/shared";
+import { UserRoleEnum } from "@lrp/shared/types/user";
 import { AdminPlugin, adminPluginConfig } from "./plugins/admin";
-import { Global, Injectable } from "@nestjs/common";
 import { getNameFromTelegram, telegramAuth } from "./plugins";
 import { ConfigService } from "@nestjs/config";
-import { InjectDataSource } from "@nestjs/typeorm";
-import { DataSource } from "typeorm";
-import { typeormAdapter } from "./adapters/typeorm.adapter";
+import { IUser } from "./entities";
+
+export interface AuthServiceOptions {
+  env: ConfigService;
+  adapter: (args: BetterAuthOptions) => Adapter;
+  logger?: Logger,
+}
+
 
 export type Plugins = [
   ReturnType<typeof telegramAuth>,
@@ -24,9 +28,20 @@ const additionalField = {
         defaultValue: UserRoleEnum.user,
         input: false,
       },
+      balance: {
+        type: "number",
+        required: true,
+        defaultValue: 0,
+        input: false,
+      },
+      telegramId: {
+        type: "string",
+        required: false,
+      }
     },
   },
 } as const satisfies Pick<BetterAuthOptions, "user" | "session" | "account" | "verification">;
+
 type AdditionalFields = typeof additionalField;
 
 export interface AuthOptions
@@ -37,36 +52,35 @@ export interface AuthOptions
 
 type BetterAuthClient = Omit<ReturnType<typeof betterAuth<AuthOptions>>, "$ERROR_CODES">;
 
-@Global()
-@Injectable()
 export class AuthService {
   readonly client: BetterAuthClient
 
   constructor(
-    env: ConfigService,
-    @InjectDataSource() db: DataSource,
+    options: AuthServiceOptions
   ) {
     this.client = betterAuth({
-      secret: env.getOrThrow("AUTH_SECRET"),
+      secret: options.env.getOrThrow("AUTH_SECRET"),
       basePath: "/auth",
       // baseURL: env.getOrThrow("API_URL"),
       rateLimit: {
-        enabled: env.getOrThrow("NODE_ENV") === "production",
+        enabled: options.env.getOrThrow("NODE_ENV") === "production",
         max: 100,
       },
+      logger: options.logger,
       advanced: {
         defaultCookieAttributes: {
           httpOnly: true,
           secure: true,
+          sameSite: "None",
           partitioned: true,
         },
         useSecureCookies: true,
         crossSubDomainCookies: {
           enabled: true,
-          domain: ".booulder.xyz"
+          domain: `.${new URL(options.env.getOrThrow("API_URL")).host.split(".").slice(-2).join('.')}`
         },
       },
-      database: typeormAdapter(db),
+      database: options.adapter,
       emailAndPassword: {
         enabled: false,
       },
@@ -76,20 +90,61 @@ export class AuthService {
             getTempEmail: tg => `${getNameFromTelegram(tg)}@example.com`,
             getTempName: tg => `${getNameFromTelegram(tg)}`,
           },
-          token: env.getOrThrow("TELEGRAM_BOT_TOKEN"),
+          token: options.env.getOrThrow("TELEGRAM_BOT_TOKEN"),
+          hooks: {
+            create: {
+              after: async ({ user, initData, adapter }) => {
+                if (!user.id) return;
+                if (initData.start_param) {
+                  const inviter = await adapter.findOne<IUser>({
+                    where: [
+                      {
+                        field: "telegramId",
+                        operator: "eq",
+                        value: initData.start_param
+                      },
+                      {
+                        field: "id",
+                        operator: "ne",
+                        value: user.id
+                      }
+                    ],
+                    model: "user",
+                  })
+
+                  if (!inviter) return
+
+                  await adapter.update<IUser>({
+                    where: [
+                      {
+                        field: "id",
+                        operator: "eq",
+                        value: user.id
+                      }
+                    ],
+                    model: "user",
+                    update: {
+                      invitedBy: inviter.id,
+                    }
+                  })
+                }
+              }
+            }
+          }
         }),
         admin(adminPluginConfig),
-        ...(env.get("NODE_ENV") === "development" ? [openAPI()] : []),
+        ...(options.env.get("NODE_ENV") === "development" ? [openAPI()] : []),
       ],
-      trustedOrigins: ["*.booulder.xyz"],
-      // JSON.parse(env.get("TRUSTED_ORIGINS") || "[]"),
+      trustedOrigins: JSON.parse(options.env.get("TRUSTED_ORIGINS") || "[]"),
       ...additionalField,
     } satisfies AuthOptions);
   }
 }
 
 export type Auth = ReturnType<typeof betterAuth<AuthOptions>>;
+export type DefaultSession = NonNullable<Awaited<ReturnType<Auth["api"]["getSession"]>>>
 
-export type UserSession<T extends null | "!" = "!"> = T extends null ?
-  Awaited<ReturnType<Auth["api"]["getSession"]>>
-  : NonNullable<Awaited<ReturnType<Auth["api"]["getSession"]>>>;
+export interface Session<T extends null | "!" = "!"> {
+  user: T extends null ? DefaultSession["user"] | null : DefaultSession["user"];
+  session: DefaultSession["session"] | null;
+}

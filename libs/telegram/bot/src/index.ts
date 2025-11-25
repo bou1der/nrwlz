@@ -28,18 +28,17 @@ export class GrammyBot {
       providers: [
         {
           inject: options.inject,
-          provide: BOT,
+          provide: options.provide || BOT,
           useFactory: async (...args: any[]) => {
             const config = await options.useFactory(...args)
             const bot = new Bot(config.token)
             await bot.init();
             if (config.webhookURL) {
-              const del = await bot.api.deleteWebhook();
+              // const del = await bot.api.deleteWebhook();
               const set = await bot.api.setWebhook(
                 config.webhookURL,
                 {
                   allowed_updates: [
-                    "channel_post",
                     "chat_member",
                     "message",
                     "inline_query",
@@ -51,10 +50,11 @@ export class GrammyBot {
                 },
               );
               const get = await bot.api.getWebhookInfo();
-              console.log({ del, set, get });
-            } else {
-              await bot.api.deleteWebhook();
+              console.log({ set, get });
             }
+            // else {
+            //   await bot.api.deleteWebhook();
+            // }
             bot.use(async (ctx, next) => {
               (ctx as Context & { utils: any }).utils = config.utils || {}
               await next();

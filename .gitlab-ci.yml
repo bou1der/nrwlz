@@ -1,29 +1,26 @@
 stages:
   - test
-  - build
-  - deploy
+  # - build
+  # - deploy
   # - migrate
 
-include:
-  - local: "apps/api/.gitlab-ci.yml"
+
+# include:
+#   - local: "apps/api/.gitlab-ci.yml"
+#   - local: "apps/web/.gitlab-ci.yml"
 
 variables:
   CI: true
   NX_SKIP_NX_CACHE: true
   NX_NO_CLOUD: true
-  IMAGE: $REGISTRY/$CI_PROJECT_PATH
-  REGISTRY: registry.booulder.xyz
   DOCKER_HOST: "tcp://docker:2375"
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
 
-test:
+typecheck:
   image: node:18.17.1
   interruptible: true
   stage: test
-  only:
-    - master
-    - merge_requests
   before_script:
     - corepack enable
     - corepack prepare pnpm@latest-10 --activate
@@ -40,7 +37,7 @@ test:
     # - pnpm exec playwright install --with-deps
 
     # - pnpm exec nx-cloud record -- echo Hello World
-    - pnpm exec nx run-many -t lint typecheck --no-cloud --skip-nx-cache
+    - pnpm exec nx run-many -t lint typecheck
     # test build e2e
   cache:
     key:

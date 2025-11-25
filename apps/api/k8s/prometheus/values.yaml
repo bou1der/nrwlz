@@ -1,0 +1,58 @@
+grafana:
+  sidecar:
+    datasources:
+      enabled: true
+      label: grafana_datasource
+      searchNamespace: "{{ .Release.Namespace }}"
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+      # traefik.ingress.kubernetes.io/router.middlewares: $NAMESPACE-monitoring-ipallowlist@kubernetescrd
+      cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
+    hosts:
+      - grafana.$NAMESPACE.$DOMAIN
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.$NAMESPACE.$DOMAIN
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      default: false
+      editable: true
+      url: http://loki-gateway.solar.svc.cluster.local
+      basicAuth: false
+      access: proxy
+    - name: Prometheus
+      type: prometheus
+      default: true
+      editable: false
+      url: http://prometheus-operated:9090
+      basicAuth: false
+      access: proxy
+    - name: Alertmanager
+      type: alertmanager
+      default: false
+      editable: true
+      url: http://prometheus-alertmanager:9093
+      basicAuth: false
+      access: proxy
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+      # traefik.ingress.kubernetes.io/router.middlewares: $NAMESPACE-monitoring-ipallowlist@kubernetescrd
+      cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
+    hosts:
+      - prometheus.$NAMESPACE.$DOMAIN
+    tls:
+      - secretName: prometheus-tls
+        hosts:
+          - prometheus.$NAMESPACE.$DOMAIN
