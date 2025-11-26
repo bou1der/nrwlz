@@ -1,4 +1,5 @@
-import { Injectable, LoggerService } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { createLogger, format, transports, Logger as WinstonLogger, } from 'winston';
 import LokiTransport from 'winston-loki'
 
@@ -33,25 +34,27 @@ const transportOptions = {
 export class Logger implements LoggerService {
   private logger: WinstonLogger;
 
-  constructor() {
+  constructor(
+    @Inject() env: ConfigService
+  ) {
     const additionalTransports: Transports[] = [];
-    // const mode = env.get("NODE_ENV")
+    const mode = env.get("NODE_ENV")
 
-    // if (mode === "production") {
-    //   additionalTransports.push(
-    //     new LokiTransport({
-    //       host: env.getOrThrow("LOKI_URL"),
-    //       labels: {
-    //         app: "solar-api",
-    //       },
-    //       json: true,
-    //       format: format.json(),
-    //       onConnectionError: (err) => {
-    //         console.error(err);
-    //       },
-    //     })
-    //   )
-    // }
+    if (mode === "production") {
+      additionalTransports.push(
+        new LokiTransport({
+          host: env.getOrThrow("LOKI_URL"),
+          labels: {
+            app: "solar-api",
+          },
+          json: true,
+          format: format.json(),
+          onConnectionError: (err) => {
+            console.error(err);
+          },
+        })
+      )
+    }
 
     this.logger = createLogger({
       format: format.combine(

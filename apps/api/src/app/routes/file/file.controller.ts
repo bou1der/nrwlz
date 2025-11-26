@@ -45,7 +45,6 @@ export class FileController {
     if (!Body) throw new NotFoundException("Файл не найден");
 
     return new StreamableFile(Readable.fromWeb(Body.transformToWebStream() as ReadableStream), {
-      length: file.fileSize,
       type: file.contentType,
       disposition: `attachment;  filename="${encodeURIComponent(file.fileName)}"`,
     })
