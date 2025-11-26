@@ -5,6 +5,40 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "migration:generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "typeorm-ts-node-commonjs",
+        "args": [
+          "-d",
+          "src/datasource.ts",
+          "migration:generate",
+          "src/migrations/migration"
+        ],
+        "cwd": "{projectRoot}",
+        "env": {
+          "TS_NODE_PROJECT": "tsconfig.app.json",
+          "NODE_OPTIONS": "--require tsconfig-paths/register"
+        }
+      }
+    },
+    "migration:run": {
+      "executor": "nx:run-commands",
+      "parallelism": false,
+      "options": {
+        "command": "typeorm-ts-node-commonjs",
+        "args": [
+          "-d",
+          "src/datasource.ts",
+          "migration:run"
+        ],
+        "cwd": "{projectRoot}",
+        "env": {
+          "TS_NODE_PROJECT": "tsconfig.app.json",
+          "NODE_OPTIONS": "--require tsconfig-paths/register"
+        }
+      }
+    },
     "build": {
       "executor": "nx:run-commands",
       "options": {

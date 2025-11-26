@@ -28,6 +28,9 @@
       "@lrp/auth/server": [
         "libs/auth/server/src/index.ts"
       ],
+      "@lrp/auth/server/entities": [
+        "libs/auth/server/src/entities/index.ts"
+      ],
       "@lrp/db": [
         "libs/db/src/index.ts"
       ],

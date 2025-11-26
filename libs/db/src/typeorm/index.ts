@@ -26,7 +26,7 @@ import { Logger, LoggerModule } from "@lrp/logger"
           } : undefined,
           type: "postgres",
           url: ro_url ? undefined : url,
-          synchronize: env.getOrThrow("NODE_ENV") !== "production",
+          synchronize: false,
           autoLoadEntities: true,
           entities: [`${__dirname}/**/*.schema{.js, .ts}`, `${__dirname}/**/*.entity{.js, .ts}`],
           logger: {

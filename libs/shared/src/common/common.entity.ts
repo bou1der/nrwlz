@@ -46,6 +46,4 @@ export class CommonEntity extends BaseEntity {
     }
   }
 }
-export type ValuesEntity<T extends object> = Omit<T, keyof CommonEntity> & {
-  id?: string;
-}
+export type ValuesEntity<T extends object> = Partial<Omit<T, keyof CommonEntity>>
