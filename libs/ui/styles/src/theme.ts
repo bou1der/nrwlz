@@ -19,7 +19,7 @@ export const pallete = {
   warning: '#f59e0b',
   danger: '#ef4444',
   light: {
-    surface: {
+    primary: {
       0: '#ffffff',
       50: '#f9fafb',
       100: '#f3f4f6',
@@ -34,7 +34,7 @@ export const pallete = {
     },
   },
   dark: {
-    surface: {
+    primary: {
       0: '#0f172a',
       50: '#1e293b',
       100: '#334155',

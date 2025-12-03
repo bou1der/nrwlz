@@ -18,7 +18,11 @@ export default [
         'error',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
+          allowCircularSelfDependency: true,
+          allow: [
+            '^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$',
+            "@lrp/web/**"
+          ],
           depConstraints: [
             {
               sourceTag: '*',

@@ -1,8 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Exclude } from "class-transformer";
 import { BaseEntity, BeforeInsert, CreateDateColumn, DeleteDateColumn, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { uuidv7 } from "uuidv7"
 
 export class CommonEntity extends BaseEntity {
+
+  assign(values: ValuesEntity<this>) {
+    Object.assign(this, values);
+    return this
+  }
+
   @ApiProperty({
     type: String,
     format: "uuid",
@@ -16,12 +23,11 @@ export class CommonEntity extends BaseEntity {
 
   @ApiProperty({
     type: Date,
-    nullable: true,
   })
-  @DeleteDateColumn({
+  @CreateDateColumn({
     type: "timestamp with time zone",
   })
-  deletedAt: Date | null;
+  createdAt: Date;
 
   @ApiProperty({
     type: Date,
@@ -31,13 +37,12 @@ export class CommonEntity extends BaseEntity {
   })
   updatedAt: Date;
 
-  @ApiProperty({
-    type: Date,
-  })
-  @CreateDateColumn({
+
+  @Exclude()
+  @DeleteDateColumn({
     type: "timestamp with time zone",
   })
-  createdAt: Date;
+  deletedAt: Date | null;
 
   @BeforeInsert()
   protected onInsert() {

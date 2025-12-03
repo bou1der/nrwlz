@@ -1,4 +1,5 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection, isDevMode } from '@angular/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
@@ -8,7 +9,10 @@ import { provideTanStackQuery, QueryClient } from "@tanstack/angular-query-exper
 import { icons, LUCIDE_ICONS, LucideIconProvider } from 'lucide-angular';
 import { environment } from '../environments/environment';
 import { providePrimeNG } from 'primeng/config';
-import { GlobalNGPreset } from "@lrp/styles/ng"
+import { GlobalNGPreset } from "@lrp/styles/ng";
+import { TranslocoHttpLoader } from './transloco-loader';
+import { provideTransloco } from '@jsverse/transloco'
+import { cookiesStorage, provideTranslocoPersistLang } from "@jsverse/transloco-persist-lang"
 
 
 export const appConfig: ApplicationConfig = {
@@ -24,6 +28,7 @@ export const appConfig: ApplicationConfig = {
         }
       }
     })),
+    provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: GlobalNGPreset,
@@ -39,6 +44,22 @@ export const appConfig: ApplicationConfig = {
     },
     ApiProvider,
     AuthProvider,
+    provideHttpClient(),
+    provideTransloco({
+      config: {
+        availableLangs: ['en', 'ru'],
+        defaultLang: 'en',
+        // Remove this option if your application doesn't support changing language in runtime.
+        reRenderOnLangChange: true,
+        prodMode: !isDevMode(),
+      },
+      loader: TranslocoHttpLoader
+    }),
+    provideTranslocoPersistLang({
+      storage: {
+        useValue: cookiesStorage()
+      }
+    })
   ]
 };
 

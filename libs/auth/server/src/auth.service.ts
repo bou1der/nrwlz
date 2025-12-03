@@ -2,9 +2,9 @@ import { Adapter, betterAuth, BetterAuthOptions, BetterAuthPlugin, Logger } from
 import { admin, openAPI } from "better-auth/plugins";
 import { UserRoleEnum } from "@lrp/shared/types/user";
 import { AdminPlugin, adminPluginConfig } from "./plugins/admin";
-import { getNameFromTelegram, telegramAuth } from "./plugins";
+import { telegramAuth } from "./plugins";
 import { ConfigService } from "@nestjs/config";
-import { IUser } from "./entities";
+// import { IUser } from "./entities";
 
 export interface AuthServiceOptions {
   env: ConfigService;
@@ -14,7 +14,7 @@ export interface AuthServiceOptions {
 
 
 export type Plugins = [
-  ReturnType<typeof telegramAuth>,
+  // ReturnType<typeof telegramAuth>,
   AdminPlugin,
   ...BetterAuthPlugin[]
 ];
@@ -85,53 +85,53 @@ export class AuthService {
         enabled: false,
       },
       plugins: [
-        telegramAuth({
-          templates: {
-            getTempEmail: tg => `${getNameFromTelegram(tg)}@example.com`,
-            getTempName: tg => `${getNameFromTelegram(tg)}`,
-          },
-          token: options.env.getOrThrow("TELEGRAM_BOT_TOKEN"),
-          hooks: {
-            create: {
-              after: async ({ user, initData, adapter }) => {
-                if (!user.id) return;
-                if (initData.start_param) {
-                  const inviter = await adapter.findOne<IUser>({
-                    where: [
-                      {
-                        field: "telegramId",
-                        operator: "eq",
-                        value: initData.start_param
-                      },
-                      {
-                        field: "id",
-                        operator: "ne",
-                        value: user.id
-                      }
-                    ],
-                    model: "user",
-                  })
-
-                  if (!inviter) return
-
-                  await adapter.update<IUser>({
-                    where: [
-                      {
-                        field: "id",
-                        operator: "eq",
-                        value: user.id
-                      }
-                    ],
-                    model: "user",
-                    update: {
-                      invitedBy: inviter.id,
-                    }
-                  })
-                }
-              }
-            }
-          }
-        }),
+        // telegramAuth({
+        //   templates: {
+        //     getTempEmail: tg => `${getNameFromTelegram(tg)}@example.com`,
+        //     getTempName: tg => `${getNameFromTelegram(tg)}`,
+        //   },
+        //   token: options.env.getOrThrow("TELEGRAM_BOT_TOKEN"),
+        //   hooks: {
+        //     create: {
+        //       after: async ({ user, initData, adapter }) => {
+        //         if (!user.id) return;
+        //         if (initData.start_param) {
+        //           const inviter = await adapter.findOne<IUser>({
+        //             where: [
+        //               {
+        //                 field: "telegramId",
+        //                 operator: "eq",
+        //                 value: initData.start_param
+        //               },
+        //               {
+        //                 field: "id",
+        //                 operator: "ne",
+        //                 value: user.id
+        //               }
+        //             ],
+        //             model: "user",
+        //           })
+        //
+        //           if (!inviter) return
+        //
+        //           await adapter.update<IUser>({
+        //             where: [
+        //               {
+        //                 field: "id",
+        //                 operator: "eq",
+        //                 value: user.id
+        //               }
+        //             ],
+        //             model: "user",
+        //             update: {
+        //               invitedBy: inviter.id,
+        //             }
+        //           })
+        //         }
+        //       }
+        //     }
+        //   }
+        // }),
         admin(adminPluginConfig),
         ...(options.env.get("NODE_ENV") === "development" ? [openAPI()] : []),
       ],

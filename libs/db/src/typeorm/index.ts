@@ -23,6 +23,7 @@ import { Logger, LoggerModule } from "@lrp/logger"
                 url: ro_url
               }
             ],
+            defaultMode: "slave",
           } : undefined,
           type: "postgres",
           url: ro_url ? undefined : url,
