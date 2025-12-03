@@ -1,9 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude } from "class-transformer";
-import { BaseEntity, BeforeInsert, CreateDateColumn, DeleteDateColumn, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import {
+  BaseEntity,
+  BeforeInsert,
+  CreateDateColumn,
+  DeleteDateColumn,
+  PrimaryColumn,
+  UpdateDateColumn
+} from "typeorm";
 import { uuidv7 } from "uuidv7"
 
 export class CommonEntity extends BaseEntity {
+  constructor() {
+    super()
+  }
 
   assign(values: ValuesEntity<this>) {
     Object.assign(this, values);
@@ -37,8 +47,7 @@ export class CommonEntity extends BaseEntity {
   })
   updatedAt: Date;
 
-
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   @DeleteDateColumn({
     type: "timestamp with time zone",
   })
@@ -52,3 +61,4 @@ export class CommonEntity extends BaseEntity {
   }
 }
 export type ValuesEntity<T extends object> = Partial<Omit<T, keyof CommonEntity>>
+

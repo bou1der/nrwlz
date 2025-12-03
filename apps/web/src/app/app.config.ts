@@ -13,6 +13,7 @@ import { GlobalNGPreset } from "@lrp/styles/ng";
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco'
 import { cookiesStorage, provideTranslocoPersistLang } from "@jsverse/transloco-persist-lang"
+import { I18nCode } from "@lrp/shared/types/i18n";
 
 
 export const appConfig: ApplicationConfig = {
@@ -47,9 +48,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideTransloco({
       config: {
-        availableLangs: ['en', 'ru'],
-        defaultLang: 'en',
-        // Remove this option if your application doesn't support changing language in runtime.
+        availableLangs: Object.keys(I18nCode),
+        defaultLang: I18nCode.en,
         reRenderOnLangChange: true,
         prodMode: !isDevMode(),
       },
@@ -58,7 +58,8 @@ export const appConfig: ApplicationConfig = {
     provideTranslocoPersistLang({
       storage: {
         useValue: cookiesStorage()
-      }
+      },
+      storageKey: "lang"
     })
   ]
 };
